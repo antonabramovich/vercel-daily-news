@@ -7,7 +7,7 @@ export default async function SearchPage() {
   const { data } = await listArticles();
 
   return (
-    <div>
+    <>
       {data?.data?.map(({ id, slug, title, excerpt }) => (
         <React.Fragment key={id}>
           <div>
@@ -17,6 +17,6 @@ export default async function SearchPage() {
           <hr/>
         </React.Fragment>
       ))}
-    </div>
+    </>
   );
 }

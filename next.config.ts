@@ -3,13 +3,34 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   cacheComponents: true,
   reactCompiler: true,
+  cacheLife: {
+    'breaking-news': {
+      stale: 60 * 15, // 15 minutes,
+      revalidate: 60 * 60, // 1 hour
+      expire: 60 * 60 * 24, // 1 day
+    },
+    'featured-articles': {
+      stale: 60 * 60 * 12, // 12 hours
+      revalidate: 60 * 60 * 24 * 2, // 2 days
+      expire: 60 * 60 * 24 * 7, // 1 week
+    }
+  },
   redirects: () => ([
     {
       source: '/articles',
       destination: '/search',
       permanent: true
     }
-  ])
+  ]),
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'i8qy5y6gxkdgdcv9.public.blob.vercel-storage.com',
+      },
+    ],
+    formats: ['image/avif', 'image/webp'],
+  }
 };
 
 export default nextConfig;
