@@ -1,4 +1,4 @@
-export function FeaturedArticleCardSkeleton() {
+export function ArticleCardSkeleton() {
   return (
     <div className={'flex flex-col gap-2 w-full animate-pulse'}>
       <div className={'aspect-256/134 bg-gray-200'} />

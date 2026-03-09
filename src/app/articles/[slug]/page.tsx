@@ -2,6 +2,8 @@ import Link from 'next/link';
 import Image from 'next/image';
 import {notFound} from 'next/navigation';
 import {ArticleContent} from '@/components/article/article-content';
+import {TrendingArticles} from '@/components/article/trending-articles';
+import {Separator} from '@/components/ui/separator';
 import {getArticle} from '@/lib/data-access/articles';
 import {formatDate, humanizeCategory} from '@/lib/utils';
 
@@ -45,6 +47,8 @@ export default async function ArticlePage({ params }: PageProps<'/articles/[slug
         />
       </div>
       <ArticleContent blocks={article.content!} />
+      <Separator />
+      <TrendingArticles exclude={[article.id!]} />
     </div>
   );
 }

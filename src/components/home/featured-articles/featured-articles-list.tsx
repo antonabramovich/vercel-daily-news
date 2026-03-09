@@ -1,4 +1,4 @@
-import {FeaturedArticleCard} from '@/components/home/featured-articles/featured-article-card';
+import {ArticleCard} from '@/components/shared/article-card/article-card';
 import {getFeaturedArticles} from '@/lib/data-access/articles';
 
 export async function FeaturedArticlesList() {
@@ -7,7 +7,7 @@ export async function FeaturedArticlesList() {
   return (
     <>
       {featuredArticles.map(({ id, ...rest }) => (
-        <FeaturedArticleCard key={id} article={rest} />
+        <ArticleCard key={id} article={rest} />
       ))}
     </>
   )

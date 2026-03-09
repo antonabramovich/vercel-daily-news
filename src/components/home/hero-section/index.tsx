@@ -15,12 +15,12 @@ export function HeroSection() {
         Changelogs, engineering deep dives, customer stories, and community updates - all in one place.
       </p>
       <div className={'flex gap-4'}>
-        <Button size={'lg'} asChild>
+        <Button size={'lg'} className={'text-sm'} asChild>
           <Link href={'/search'}>
             Browse articles <ArrowRight />
           </Link>
         </Button>
-        <Button variant={'outline'} size={'lg'}>
+        <Button variant={'outline'} size={'lg'} className={'text-sm'}>
           Subscribe
         </Button>
       </div>

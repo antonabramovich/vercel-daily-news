@@ -1,6 +1,7 @@
 import 'server-only';
 import {cacheLife, cacheTag} from 'next/cache';
-import {Article, listArticles, getArticle as getArticleFromApi} from '@/lib/api/client';
+import {connection} from 'next/server';
+import {Article, listArticles, getArticle as getArticleFromApi, getTrendingArticles as getTrendingArticlesFromApi} from '@/lib/api/client';
 
 export type FeaturedArticle = Pick<
   Article,
@@ -48,4 +49,23 @@ export async function getArticle(idOrSlug: string): Promise<Article | null> {
   });
 
   return data?.data ?? null;
+}
+
+export async function getTrendingArticles(exclude: string[]): Promise<Array<FeaturedArticle>> {
+  await connection();
+  const { data } = await getTrendingArticlesFromApi({
+    query: {
+      exclude: exclude.join(',')
+    }
+  });
+
+  return data?.data?.map(({ id, slug, title, excerpt, image, category, publishedAt }) => ({
+    id,
+    slug,
+    title,
+    excerpt,
+    image,
+    category,
+    publishedAt
+  })) ?? [];
 }

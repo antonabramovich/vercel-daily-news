@@ -7,7 +7,7 @@ interface FeaturedArticleCardProps {
   article: Omit<FeaturedArticle, 'id'>;
 }
 
-export function FeaturedArticleCard({ article }: FeaturedArticleCardProps) {
+export function ArticleCard({ article }: FeaturedArticleCardProps) {
   const { slug, title, excerpt, image, category, publishedAt } = article;
 
   return (
