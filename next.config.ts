@@ -13,6 +13,11 @@ const nextConfig: NextConfig = {
       stale: 60 * 60 * 12, // 12 hours
       revalidate: 60 * 60 * 24 * 2, // 2 days
       expire: 60 * 60 * 24 * 7, // 1 week
+    },
+    'article': {
+      stale: 60 * 60 * 24, // 1 day
+      revalidate: 60 * 60 * 24 * 7, // 1 week
+      expire: 60 * 60 * 24 * 30, // 1 month
     }
   },
   redirects: () => ([

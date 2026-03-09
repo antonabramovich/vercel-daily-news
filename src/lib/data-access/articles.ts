@@ -1,6 +1,6 @@
 import 'server-only';
 import {cacheLife, cacheTag} from 'next/cache';
-import {Article, listArticles} from '@/lib/api/client';
+import {Article, listArticles, getArticle as getArticleFromApi} from '@/lib/api/client';
 
 export type FeaturedArticle = Pick<
   Article,
@@ -34,4 +34,18 @@ export async function getFeaturedArticles(): Promise<Array<FeaturedArticle>> {
     category,
     publishedAt
   })) ?? [];
+}
+
+export async function getArticle(idOrSlug: string): Promise<Article | null> {
+  'use cache';
+  cacheLife('article');
+  cacheTag(`article-${idOrSlug}`);
+
+  const { data } = await getArticleFromApi({
+    path: {
+      id: idOrSlug
+    }
+  });
+
+  return data?.data ?? null;
 }
