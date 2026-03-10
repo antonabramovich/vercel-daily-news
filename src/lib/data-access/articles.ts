@@ -3,7 +3,7 @@ import {cacheLife, cacheTag} from 'next/cache';
 import {connection} from 'next/server';
 import {Article, listArticles, getArticle as getArticleFromApi, getTrendingArticles as getTrendingArticlesFromApi} from '@/lib/api/client';
 
-export type FeaturedArticle = Pick<
+export type ArticleCard = Pick<
   Article,
   | 'id'
   | 'slug'
@@ -14,7 +14,21 @@ export type FeaturedArticle = Pick<
   | 'publishedAt'
 >;
 
-export async function getFeaturedArticles(): Promise<Array<FeaturedArticle>> {
+export async function getArticles(options?: Parameters<typeof listArticles>[0]): Promise<ArticleCard[]> {
+  const { data } = await listArticles(options);
+
+  return data?.data?.map(({ id, slug, title, excerpt, image, category, publishedAt }) => ({
+    id,
+    slug,
+    title,
+    excerpt,
+    image,
+    category,
+    publishedAt
+  })) ?? [];
+}
+
+export async function getFeaturedArticles(): Promise<ArticleCard[]> {
   'use cache';
   cacheLife('featured-articles');
   cacheTag('featured-articles');
@@ -23,6 +37,25 @@ export async function getFeaturedArticles(): Promise<Array<FeaturedArticle>> {
     query: {
       featured: 'true',
       limit: 6
+    }
+  });
+
+  return data?.data?.map(({ id, slug, title, excerpt, image, category, publishedAt }) => ({
+    id,
+    slug,
+    title,
+    excerpt,
+    image,
+    category,
+    publishedAt
+  })) ?? [];
+}
+
+export async function getTrendingArticles(exclude: string[]): Promise<ArticleCard[]> {
+  await connection();
+  const { data } = await getTrendingArticlesFromApi({
+    query: {
+      exclude: exclude.join(',')
     }
   });
 
@@ -49,23 +82,4 @@ export async function getArticle(idOrSlug: string): Promise<Article | null> {
   });
 
   return data?.data ?? null;
-}
-
-export async function getTrendingArticles(exclude: string[]): Promise<Array<FeaturedArticle>> {
-  await connection();
-  const { data } = await getTrendingArticlesFromApi({
-    query: {
-      exclude: exclude.join(',')
-    }
-  });
-
-  return data?.data?.map(({ id, slug, title, excerpt, image, category, publishedAt }) => ({
-    id,
-    slug,
-    title,
-    excerpt,
-    image,
-    category,
-    publishedAt
-  })) ?? [];
 }

@@ -1,13 +1,14 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import {FeaturedArticle} from '@/lib/data-access/articles';
 import {formatDate, humanizeCategory} from '@/lib/utils';
+import {getSearchLink} from '@/lib/search-params/search';
+import type {ArticleCard} from '@/lib/data-access/articles';
 
-interface FeaturedArticleCardProps {
-  article: Omit<FeaturedArticle, 'id'>;
+interface ArticleCardProps {
+  article: Omit<ArticleCard, 'id'>;
 }
 
-export function ArticleCard({ article }: FeaturedArticleCardProps) {
+export function ArticleCard({ article }: ArticleCardProps) {
   const { slug, title, excerpt, image, category, publishedAt } = article;
 
   return (
@@ -22,7 +23,7 @@ export function ArticleCard({ article }: FeaturedArticleCardProps) {
       <div className={'flex items-center gap-2 text-sm text-muted-foreground'}>
         <Link
           prefetch={false}
-          href={`/search?category=${category}`}
+          href={getSearchLink({ category })}
           className={'uppercase hover:underline'}>
           {humanizeCategory(category!)}
         </Link>

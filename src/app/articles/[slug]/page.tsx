@@ -6,6 +6,7 @@ import {TrendingArticles} from '@/components/article/trending-articles';
 import {Separator} from '@/components/ui/separator';
 import {getArticle} from '@/lib/data-access/articles';
 import {formatDate, humanizeCategory} from '@/lib/utils';
+import {getSearchLink} from '@/lib/search-params/search';
 
 export function generateStaticParams() {
   return [{ slug: '__placeholder__' }];
@@ -24,7 +25,7 @@ export default async function ArticlePage({ params }: PageProps<'/articles/[slug
       <div className={'mx-auto'}>
         <Link
           prefetch={false}
-          href={`/search?category=${article.category}`}
+          href={getSearchLink({ category: article.category })}
           className={'text-sm uppercase hover:underline text-muted-foreground'}>
           {humanizeCategory(article.category!)}
         </Link>

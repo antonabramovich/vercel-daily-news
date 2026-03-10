@@ -18,6 +18,11 @@ const nextConfig: NextConfig = {
       stale: 60 * 60 * 24, // 1 day
       revalidate: 60 * 60 * 24 * 7, // 1 week
       expire: 60 * 60 * 24 * 30, // 1 month
+    },
+    'categories': {
+      stale: 60 * 60 * 24 * 7, // 1 week
+      revalidate: 60 * 60 * 24 * 30, // 30 days
+      expire: 60 * 60 * 24 * 365, // 365 days
     }
   },
   redirects: () => ([
@@ -31,7 +36,7 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: 'i8qy5y6gxkdgdcv9.public.blob.vercel-storage.com',
+        hostname: '**.public.blob.vercel-storage.com',
       },
     ],
     formats: ['image/avif', 'image/webp'],
