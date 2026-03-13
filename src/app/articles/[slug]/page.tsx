@@ -8,6 +8,11 @@ import {getArticle} from '@/lib/data-access/articles';
 import {formatDate, humanizeCategory} from '@/lib/utils';
 import {getSearchLink} from '@/lib/search-params/search';
 
+// kick-in ISR
+export function generateStaticParams() {
+  return [{ slug: '__placeholder__' }];
+}
+
 export default async function ArticlePage({ params }: PageProps<'/articles/[slug]'>) {
   const { slug } = await params;
   const article = await getArticle(slug);

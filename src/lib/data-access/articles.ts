@@ -52,7 +52,6 @@ export async function getFeaturedArticles(): Promise<ArticleCard[]> {
 }
 
 export async function getTrendingArticles(exclude: string[]): Promise<ArticleCard[]> {
-  await connection();
   const { data } = await getTrendingArticlesFromApi({
     query: {
       exclude: exclude.join(',')
