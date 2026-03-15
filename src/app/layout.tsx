@@ -1,6 +1,8 @@
 import React from 'react';
 import type {Metadata} from 'next';
 import {Geist, Geist_Mono, Outfit} from 'next/font/google';
+import {Analytics} from '@vercel/analytics/next';
+import {SpeedInsights} from '@vercel/speed-insights/next';
 import {NuqsAdapter} from 'nuqs/adapters/next/app'
 import {cn} from '@/lib/utils';
 import {Header} from '@/components/shared/header';
@@ -34,6 +36,8 @@ export default function RootLayout({ children }: LayoutProps<'/'>) {
   return (
     <html lang="en" className={cn('font-sans', outfit.variable)}>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased overflow-y-scroll`}>
+        <Analytics />
+        <SpeedInsights />
         <NuqsAdapter>
           <div className={'flex flex-col min-h-screen'}>
             <Header />

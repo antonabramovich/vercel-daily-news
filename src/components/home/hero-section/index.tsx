@@ -1,6 +1,7 @@
 import Link from 'next/link';
-import {Button} from '@/components/ui/button';
 import {ArrowRight} from 'lucide-react';
+import {Button} from '@/components/ui/button';
+import {SubscribeButton} from '@/components/home/hero-section/subscribe-button';
 
 export function HeroSection() {
   return (
@@ -20,9 +21,7 @@ export function HeroSection() {
             Browse articles <ArrowRight />
           </Link>
         </Button>
-        <Button variant={'outline'} size={'lg'} className={'text-sm'}>
-          Subscribe
-        </Button>
+        <SubscribeButton />
       </div>
     </section>
   )

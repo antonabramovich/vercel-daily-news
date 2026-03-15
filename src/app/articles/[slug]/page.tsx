@@ -1,24 +1,36 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import {notFound} from 'next/navigation';
+import {Separator} from '@/components/ui/separator';
 import {ArticleContent} from '@/components/article/article-content';
 import {TrendingArticles} from '@/components/article/trending-articles';
-import {Separator} from '@/components/ui/separator';
+import {SubscribeCallToAction} from '@/components/article/call-to-action';
 import {getArticle} from '@/lib/data-access/articles';
+import {getSubscriptionStatus} from '@/lib/data-access/subscription';
 import {formatDate, humanizeCategory} from '@/lib/utils';
 import {getSearchLink} from '@/lib/search-params/search';
 
-// kick-in ISR
 export function generateStaticParams() {
   return [{ slug: '__placeholder__' }];
 }
 
 export default async function ArticlePage({ params }: PageProps<'/articles/[slug]'>) {
   const { slug } = await params;
-  const article = await getArticle(slug);
+  const [
+    article,
+    subscriptionStatus,
+  ] = await Promise.all([
+    getArticle(slug),
+    getSubscriptionStatus()
+  ]);
 
   if (!article) {
     return notFound();
+  }
+
+  let content = article.content ?? [];
+  if (subscriptionStatus === 'inactive') {
+    content = article.content?.slice(0, 2) || [];
   }
 
   return (
@@ -48,7 +60,8 @@ export default async function ArticlePage({ params }: PageProps<'/articles/[slug
           height={200}
         />
       </div>
-      <ArticleContent blocks={article.content!} />
+      <ArticleContent blocks={content} />
+      {subscriptionStatus === 'inactive' && <SubscribeCallToAction />}
       <Separator />
       <TrendingArticles exclude={[article.id!]} />
     </div>
