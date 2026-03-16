@@ -5,32 +5,21 @@ import {Separator} from '@/components/ui/separator';
 import {ArticleContent} from '@/components/article/article-content';
 import {TrendingArticles} from '@/components/article/trending-articles';
 import {SubscribeCallToAction} from '@/components/article/call-to-action';
-import {getArticle} from '@/lib/data-access/articles';
-import {getSubscriptionStatus} from '@/lib/data-access/subscription';
+import {getArticleMeta, getFeaturedArticles} from '@/lib/data-access/articles';
 import {formatDate, humanizeCategory} from '@/lib/utils';
 import {getSearchLink} from '@/lib/search-params/search';
 
-export function generateStaticParams() {
-  return [{ slug: '__placeholder__' }];
+export async function generateStaticParams() {
+  const featuredArticles = await getFeaturedArticles();
+  return featuredArticles.map(({ slug }) => ({ slug }));
 }
 
 export default async function ArticlePage({ params }: PageProps<'/articles/[slug]'>) {
   const { slug } = await params;
-  const [
-    article,
-    subscriptionStatus,
-  ] = await Promise.all([
-    getArticle(slug),
-    getSubscriptionStatus()
-  ]);
+  const article = await getArticleMeta(slug);
 
   if (!article) {
     return notFound();
-  }
-
-  let content = article.content ?? [];
-  if (subscriptionStatus === 'inactive') {
-    content = article.content?.slice(0, 2) || [];
   }
 
   return (
@@ -60,8 +49,8 @@ export default async function ArticlePage({ params }: PageProps<'/articles/[slug
           height={200}
         />
       </div>
-      <ArticleContent blocks={content} />
-      {subscriptionStatus === 'inactive' && <SubscribeCallToAction />}
+      <ArticleContent slug={slug} />
+      <SubscribeCallToAction />
       <Separator />
       <TrendingArticles exclude={[article.id!]} />
     </div>

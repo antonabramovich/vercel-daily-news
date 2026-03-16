@@ -8,7 +8,7 @@ export default function ArticleLoadingPage() {
         <span>&middot;</span>
         <div className={'w-16 h-4 bg-gray-200'} />
       </div>
-      <div className={'mx-auto w-125 h-60 bg-gray-200'} />
+      <div className={'mx-auto w-full aspect-3/4 max-w-125 max-h-60 bg-gray-200'} />
       <div className={'w-full h-8 bg-gray-200'} />
       <div className={'w-full h-8 bg-gray-200'} />
       <div className={'w-full h-8 bg-gray-200'} />

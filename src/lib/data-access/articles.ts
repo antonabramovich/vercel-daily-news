@@ -1,9 +1,27 @@
 import 'server-only';
 import {cacheLife, cacheTag} from 'next/cache';
-import {connection} from 'next/server';
-import {Article, listArticles, getArticle as getArticleFromApi, getTrendingArticles as getTrendingArticlesFromApi} from '@/lib/api/client';
+import {
+  Article,
+  ContentBlock,
+  listArticles,
+  getArticle as getArticleFromApi,
+  getTrendingArticles as getTrendingArticlesFromApi
+} from '@/lib/api/client';
+import {getSubscriptionStatus} from '@/lib/data-access/subscription';
 
-export type ArticleCard = Pick<
+export type ArticleDto = Pick<
+  Article,
+  | 'id'
+  | 'slug'
+  | 'title'
+  | 'author'
+  | 'content'
+  | 'image'
+  | 'category'
+  | 'publishedAt'
+>;
+
+export type ArticleCardDto = Pick<
   Article,
   | 'id'
   | 'slug'
@@ -14,7 +32,18 @@ export type ArticleCard = Pick<
   | 'publishedAt'
 >;
 
-export async function getArticles(options?: Parameters<typeof listArticles>[0]): Promise<ArticleCard[]> {
+export type ArticleMetaDto = Pick<
+  Article,
+  | 'id'
+  | 'slug'
+  | 'title'
+  | 'author'
+  | 'image'
+  | 'category'
+  | 'publishedAt'
+>;
+
+export async function getArticles(options?: Parameters<typeof listArticles>[0]): Promise<ArticleCardDto[]> {
   const { data } = await listArticles(options);
 
   return data?.data?.map(({ id, slug, title, excerpt, image, category, publishedAt }) => ({
@@ -28,7 +57,7 @@ export async function getArticles(options?: Parameters<typeof listArticles>[0]):
   })) ?? [];
 }
 
-export async function getFeaturedArticles(): Promise<ArticleCard[]> {
+export async function getFeaturedArticles(): Promise<ArticleCardDto[]> {
   'use cache';
   cacheLife('featured-articles');
   cacheTag('featured-articles');
@@ -51,7 +80,7 @@ export async function getFeaturedArticles(): Promise<ArticleCard[]> {
   })) ?? [];
 }
 
-export async function getTrendingArticles(exclude: string[]): Promise<ArticleCard[]> {
+export async function getTrendingArticles(exclude: string[]): Promise<ArticleCardDto[]> {
   const { data } = await getTrendingArticlesFromApi({
     query: {
       exclude: exclude.join(',')
@@ -69,16 +98,64 @@ export async function getTrendingArticles(exclude: string[]): Promise<ArticleCar
   })) ?? [];
 }
 
-export async function getArticle(idOrSlug: string): Promise<Article | null> {
+export async function getArticleMeta(slug: string): Promise<ArticleMetaDto | null> {
+  const article = await getArticle(slug);
+
+  if (!article) {
+    return null;
+  }
+
+  return {
+    id: article.id,
+    slug: article.slug,
+    title: article.title,
+    author: article.author,
+    image: article.image,
+    category: article.category,
+    publishedAt: article.publishedAt
+  };
+}
+
+export async function getArticleContent(slug: string): Promise<ContentBlock[]> {
+  const [
+    article,
+    subscriptionStatus
+  ] = await Promise.all([
+    getArticle(slug),
+    getSubscriptionStatus()
+  ]);
+
+  let content = article?.content ?? [];
+  if (subscriptionStatus === 'inactive') {
+    content = content.slice(0, 2);
+  }
+
+  return content;
+}
+
+async function getArticle(slug: string): Promise<ArticleDto | null> {
   'use cache';
   cacheLife('article');
-  cacheTag(`article-${idOrSlug}`);
+  cacheTag(`article-${slug}`);
 
-  const { data } = await getArticleFromApi({
+  const {data} = await getArticleFromApi({
     path: {
-      id: idOrSlug
+      id: slug
     }
   });
 
-  return data?.data ?? null;
+  if (!data?.data) {
+    return null;
+  }
+
+  return {
+    id: data.data.id,
+    slug: data.data.slug,
+    title: data.data.title,
+    author: data.data.author,
+    content: data.data.content,
+    image: data.data.image,
+    category: data.data.category,
+    publishedAt: data.data.publishedAt
+  };
 }

@@ -2,11 +2,11 @@ import Image from 'next/image';
 import Link from 'next/link';
 import {formatDate, humanizeCategory} from '@/lib/utils';
 import {getSearchLink} from '@/lib/search-params/search';
-import type {ArticleCard} from '@/lib/data-access/articles';
+import type {ArticleCardDto} from '@/lib/data-access/articles';
 import {HoverPrefetchLink} from "@/components/shared/hover-prefetch-link";
 
 interface ArticleCardProps {
-  article: Omit<ArticleCard, 'id'>;
+  article: Omit<ArticleCardDto, 'id'>;
 }
 
 export function ArticleCard({ article }: ArticleCardProps) {

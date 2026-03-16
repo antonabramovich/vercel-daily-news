@@ -1,15 +1,17 @@
 import Image from 'next/image';
 import Markdown from 'react-markdown';
-import {ContentBlock} from '@/lib/api/client';
+import {getArticleContent} from "@/lib/data-access/articles";
 
-interface ArticleContentProps {
-  blocks: ContentBlock[];
+export interface ArticleContentBlocksProps {
+  slug: string;
 }
 
-export function ArticleContent({ blocks }: ArticleContentProps) {
+export async function ArticleContentBlocks({ slug }: ArticleContentBlocksProps) {
+  const blocks = await getArticleContent(slug);
+
   return (
     <article className={'prose md:prose-xl max-w-4xl mx-auto'}>
-      {blocks.map((block, i) => {
+      {blocks?.map((block, i) => {
         switch (block.type) {
           case 'paragraph':
             return <Markdown key={i}>{block.text}</Markdown>
