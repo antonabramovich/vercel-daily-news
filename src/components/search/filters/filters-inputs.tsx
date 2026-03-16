@@ -28,6 +28,7 @@ export function FiltersInputs({ categoriesPromise }: FiltersInputsProps) {
           <SelectValue placeholder="All categories" />
         </SelectTrigger>
         <SelectContent position={'popper'}>
+          <SelectItem value={null!}>All categories</SelectItem>
           {categories.map(({ slug, name }) => (
             <SelectItem key={slug} value={slug!}>{name}</SelectItem>
           ))}
