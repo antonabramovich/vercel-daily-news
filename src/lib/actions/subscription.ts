@@ -25,9 +25,10 @@ export async function subscribe() {
     name: 'x-subscription-token',
     value: subscriptionToken,
     httpOnly: true,
+    secure: Boolean(process.env.VERCEL_URL),
     path: '/',
     maxAge: 60 * 60 * 24 * 365, // 1 year
-  })
+  });
 }
 
 export async function unsubscribe() {
