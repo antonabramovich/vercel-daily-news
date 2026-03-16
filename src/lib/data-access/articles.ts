@@ -9,55 +9,26 @@ import {
 } from '@/lib/api/client';
 import {getSubscriptionStatus} from '@/lib/data-access/subscription';
 
-export type ArticleDto = Pick<
-  Article,
-  | 'id'
-  | 'slug'
-  | 'title'
-  | 'author'
-  | 'content'
-  | 'image'
-  | 'category'
-  | 'publishedAt'
->;
-
-export type ArticleCardDto = Pick<
-  Article,
-  | 'id'
-  | 'slug'
-  | 'title'
-  | 'excerpt'
-  | 'image'
-  | 'category'
-  | 'publishedAt'
->;
-
 export type ArticleMetaDto = Pick<
   Article,
   | 'id'
   | 'slug'
   | 'title'
+  | 'excerpt'
   | 'author'
   | 'image'
   | 'category'
   | 'publishedAt'
+  | 'tags'
 >;
 
-export async function getArticles(options?: Parameters<typeof listArticles>[0]): Promise<ArticleCardDto[]> {
+export async function getArticles(options?: Parameters<typeof listArticles>[0]): Promise<ArticleMetaDto[]> {
   const { data } = await listArticles(options);
 
-  return data?.data?.map(({ id, slug, title, excerpt, image, category, publishedAt }) => ({
-    id,
-    slug,
-    title,
-    excerpt,
-    image,
-    category,
-    publishedAt
-  })) ?? [];
+  return data?.data?.map(toArticleMetaDto) ?? [];
 }
 
-export async function getFeaturedArticles(): Promise<ArticleCardDto[]> {
+export async function getFeaturedArticles(): Promise<ArticleMetaDto[]> {
   'use cache';
   cacheLife('featured-articles');
   cacheTag('featured-articles');
@@ -69,33 +40,17 @@ export async function getFeaturedArticles(): Promise<ArticleCardDto[]> {
     }
   });
 
-  return data?.data?.map(({ id, slug, title, excerpt, image, category, publishedAt }) => ({
-    id,
-    slug,
-    title,
-    excerpt,
-    image,
-    category,
-    publishedAt
-  })) ?? [];
+  return data?.data?.map(toArticleMetaDto) ?? [];
 }
 
-export async function getTrendingArticles(exclude: string[]): Promise<ArticleCardDto[]> {
+export async function getTrendingArticles(exclude: string[]): Promise<ArticleMetaDto[]> {
   const { data } = await getTrendingArticlesFromApi({
     query: {
       exclude: exclude.join(',')
     }
   });
 
-  return data?.data?.map(({ id, slug, title, excerpt, image, category, publishedAt }) => ({
-    id,
-    slug,
-    title,
-    excerpt,
-    image,
-    category,
-    publishedAt
-  })) ?? [];
+  return data?.data?.map(toArticleMetaDto) ?? [];
 }
 
 export async function getArticleMeta(slug: string): Promise<ArticleMetaDto | null> {
@@ -105,15 +60,7 @@ export async function getArticleMeta(slug: string): Promise<ArticleMetaDto | nul
     return null;
   }
 
-  return {
-    id: article.id,
-    slug: article.slug,
-    title: article.title,
-    author: article.author,
-    image: article.image,
-    category: article.category,
-    publishedAt: article.publishedAt
-  };
+  return toArticleMetaDto(article);
 }
 
 export async function getArticleContent(slug: string): Promise<ContentBlock[]> {
@@ -133,7 +80,7 @@ export async function getArticleContent(slug: string): Promise<ContentBlock[]> {
   return content;
 }
 
-async function getArticle(slug: string): Promise<ArticleDto | null> {
+async function getArticle(slug: string): Promise<Article | null> {
   'use cache';
   cacheLife('article');
   cacheTag(`article-${slug}`);
@@ -144,18 +91,19 @@ async function getArticle(slug: string): Promise<ArticleDto | null> {
     }
   });
 
-  if (!data?.data) {
-    return null;
-  }
+  return data?.data ?? null;
+}
 
+function toArticleMetaDto(article: Article): ArticleMetaDto {
   return {
-    id: data.data.id,
-    slug: data.data.slug,
-    title: data.data.title,
-    author: data.data.author,
-    content: data.data.content,
-    image: data.data.image,
-    category: data.data.category,
-    publishedAt: data.data.publishedAt
+    id: article.id,
+    slug: article.slug,
+    title: article.title,
+    author: article.author,
+    excerpt: article.excerpt,
+    image: article.image,
+    category: article.category,
+    publishedAt: article.publishedAt,
+    tags: article.tags
   };
 }

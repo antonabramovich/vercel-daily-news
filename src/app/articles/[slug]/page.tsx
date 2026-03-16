@@ -1,3 +1,4 @@
+import type { Metadata } from 'next'
 import Link from 'next/link';
 import Image from 'next/image';
 import {notFound} from 'next/navigation';
@@ -8,6 +9,41 @@ import {SubscribeCallToAction} from '@/components/article/call-to-action';
 import {getArticleMeta, getFeaturedArticles} from '@/lib/data-access/articles';
 import {formatDate, humanizeCategory} from '@/lib/utils';
 import {getSearchLink} from '@/lib/search-params/search';
+
+export async function generateMetadata({ params }: PageProps<'/articles/[slug]'>): Promise<Metadata> {
+  const { slug } = await params;
+  const article = await getArticleMeta(slug);
+
+  if (!article) {
+    return {};
+  }
+
+  return {
+    title: article.title,
+    description: article.excerpt,
+    category: article.category,
+    keywords: article.tags?.join(', '),
+    authors: { name: article.author?.name },
+    alternates: {
+      canonical: `/${slug}`,
+    },
+    openGraph: {
+      title: article.title,
+      description: article.excerpt,
+      authors: article.author?.name ? [article.author.name] : '',
+      images: [
+        {
+          url: article.image!,
+          alt: article.title,
+          width: 1200,
+          height: 630,
+        },
+      ],
+      type: 'article',
+      publishedTime: article.publishedAt
+    },
+  };
+}
 
 export async function generateStaticParams() {
   const featuredArticles = await getFeaturedArticles();
@@ -42,7 +78,7 @@ export default async function ArticlePage({ params }: PageProps<'/articles/[slug
       </div>
       <div className={'mx-auto'}>
         <Image
-          priority
+          preload
           src={article.image!}
           alt={`${article.title}'s article image`}
           width={500}

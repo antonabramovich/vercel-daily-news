@@ -7,7 +7,7 @@ export default function ArticleNotFoundPage() {
   return (
     <div className={'flex flex-col items-center gap-4 mt-8 md:mt-16 text-center'}>
       <Image
-        priority
+        preload
         src={'/not-found.png'}
         alt={'Article not found illustration'}
         width={82}

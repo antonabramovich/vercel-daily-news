@@ -29,7 +29,13 @@ export const metadata: Metadata = {
     default: 'Vercel Daily News',
     template: '%s | Vercel Daily News',
   },
-  description: 'News and insights from the world of Vercel and frontend development.'
+  description: 'News and insights from the world of Vercel and frontend development.',
+  metadataBase: new URL(process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:3001'),
+  openGraph: {
+    siteName: 'Vercel Daily News',
+    locale: 'en_US',
+    type: 'website',
+  }
 };
 
 export default function RootLayout({ children }: LayoutProps<'/'>) {

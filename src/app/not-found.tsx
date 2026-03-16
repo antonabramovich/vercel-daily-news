@@ -7,7 +7,7 @@ export default function GlobalNotFoundPage() {
   return (
     <div className={'flex flex-col items-center gap-4 mt-8 md:mt-16 text-center'}>
       <Image
-        priority
+        preload
         src={'/not-found.png'}
         alt={'Page not found illustration'}
         width={82}
