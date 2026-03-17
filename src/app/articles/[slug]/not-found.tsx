@@ -9,7 +9,7 @@ export default function ArticleNotFoundPage() {
       <Image
         preload
         src={'/not-found.png'}
-        alt={'Article not found illustration'}
+        alt={'Article not found'}
         width={82}
         height={149}
       />

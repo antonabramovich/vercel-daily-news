@@ -22,7 +22,11 @@ export type ArticleMetaDto = Pick<
   | 'tags'
 >;
 
-export async function getArticles(options?: Parameters<typeof listArticles>[0]): Promise<ArticleMetaDto[]> {
+export async function getArticles(options: Parameters<typeof listArticles>[0]): Promise<ArticleMetaDto[]> {
+  'use cache';
+  cacheLife('search-results');
+  cacheTag('search-results');
+
   const { data } = await listArticles(options);
 
   return data?.data?.map(toArticleMetaDto) ?? [];

@@ -12,7 +12,7 @@ export function Header() {
         <div className={'font-bold flex gap-2 items-center'}>
           <Image
             src={'/vercel.svg'}
-            alt={'Vercel Daily Logo'}
+            alt={'Vercel Daily News logo'}
             width={16}
             height={16}
           />

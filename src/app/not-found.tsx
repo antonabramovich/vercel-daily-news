@@ -9,7 +9,7 @@ export default function GlobalNotFoundPage() {
       <Image
         preload
         src={'/not-found.png'}
-        alt={'Page not found illustration'}
+        alt={'Page not found'}
         width={82}
         height={149}
       />

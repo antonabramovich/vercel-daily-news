@@ -80,7 +80,7 @@ export default async function ArticlePage({ params }: PageProps<'/articles/[slug
         <Image
           preload
           src={article.image!}
-          alt={`${article.title}'s article image`}
+          alt={article.title!}
           width={500}
           height={200}
         />

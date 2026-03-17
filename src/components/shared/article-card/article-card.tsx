@@ -16,7 +16,7 @@ export function ArticleCard({ article }: ArticleCardProps) {
     <div className={'flex flex-col gap-2 w-full'}>
       <Image
         src={image!}
-        alt={`${title}'s article image`}
+        alt={title!}
         width={400}
         height={225}
         className={'w-full aspect-video object-cover'}
