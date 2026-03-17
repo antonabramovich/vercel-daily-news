@@ -4,9 +4,10 @@ import {Geist, Geist_Mono, Outfit} from 'next/font/google';
 import {Analytics} from '@vercel/analytics/next';
 import {SpeedInsights} from '@vercel/speed-insights/next';
 import {NuqsAdapter} from 'nuqs/adapters/next/app'
-import {cn} from '@/lib/utils';
 import {Header} from '@/components/shared/header';
 import {Footer} from '@/components/shared/footer';
+import {getPublicationConfig} from '@/lib/data-access/publication-config';
+import {cn} from '@/lib/utils';
 import './globals.css';
 
 const outfit = Outfit({
@@ -24,19 +25,23 @@ const geistMono = Geist_Mono({
   subsets: ['latin'],
 });
 
-export const metadata: Metadata = {
-  title: {
-    default: 'Vercel Daily News',
-    template: '%s | Vercel Daily News',
-  },
-  description: 'News and insights from the world of Vercel and frontend development.',
-  metadataBase: new URL(process.env.VERCEL_PROJECT_PRODUCTION_URL ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}` : 'http://localhost:3001'),
-  openGraph: {
-    siteName: 'Vercel Daily News',
-    locale: 'en_US',
-    type: 'website',
+export async function generateMetadata(): Promise<Metadata> {
+  const publicationConfig = await getPublicationConfig();
+
+  return {
+    title: {
+      default: publicationConfig?.seo?.defaultTitle ?? 'Vercel Daily News',
+      template: publicationConfig?.seo?.titleTemplate ?? '%s | Vercel Daily News',
+    },
+    description: publicationConfig?.seo?.defaultDescription ?? 'News and insights from the world of Vercel and frontend development.',
+    metadataBase: new URL(process.env.VERCEL_PROJECT_PRODUCTION_URL ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}` : 'http://localhost:3000'),
+    openGraph: {
+      siteName: publicationConfig?.publicationName ?? 'Vercel Daily News',
+      locale: 'en_US',
+      type: 'website'
+    }
   }
-};
+}
 
 export default function RootLayout({ children }: LayoutProps<'/'>) {
   return (
