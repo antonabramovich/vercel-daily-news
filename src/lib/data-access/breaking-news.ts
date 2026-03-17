@@ -2,7 +2,7 @@ import 'server-only';
 import {cacheLife, cacheTag} from 'next/cache';
 import {BreakingNews, getBreakingNews as getBreakingNewsFromApi} from '@/lib/api/client';
 
-export type BreakingNewsDto = Pick<
+type BreakingNewsDto = Pick<
   BreakingNews,
   | 'articleId'
   | 'headline'

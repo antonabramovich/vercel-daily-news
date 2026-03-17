@@ -17,9 +17,9 @@ export function ArticleCard({ article }: ArticleCardProps) {
       <Image
         src={image!}
         alt={`${title}'s article image`}
-        width={256}
-        height={134}
-        className={'w-full'}
+        width={400}
+        height={225}
+        className={'w-full aspect-video object-cover'}
       />
       <div className={'flex items-center gap-2 text-sm text-muted-foreground'}>
         <Link
