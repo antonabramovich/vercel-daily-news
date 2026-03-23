@@ -36,6 +36,7 @@ export async function generateMetadata(): Promise<Metadata> {
     description: publicationConfig?.seo?.defaultDescription ?? 'News and insights from the world of Vercel and frontend development.',
     metadataBase: new URL(process.env.VERCEL_PROJECT_PRODUCTION_URL ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}` : 'http://localhost:3000'),
     openGraph: {
+      url: '/',
       siteName: publicationConfig?.publicationName ?? 'Vercel Daily News',
       locale: 'en_US',
       type: 'website'

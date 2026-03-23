@@ -8,7 +8,7 @@ export type TrendingArticlesProps = TrendingArticlesListProps;
 export function TrendingArticles({ exclude }: TrendingArticlesProps) {
   return (
     <div className={'flex flex-col gap-4'}>
-      <h4 className={'text-3xl font-medium'}>Trending articles</h4>
+      <h2 className={'text-3xl font-medium'}>Trending articles</h2>
       <ArticleCardGrid>
         <Suspense fallback={<TrendingArticlesListSkeleton />}>
           <TrendingArticlesList exclude={exclude}/>

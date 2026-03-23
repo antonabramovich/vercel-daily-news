@@ -1,5 +1,4 @@
 import Image from 'next/image';
-import Link from 'next/link';
 import {formatDate, humanizeCategory} from '@/lib/utils';
 import {getSearchLink} from '@/lib/search-params/search';
 import type {ArticleMetaDto} from '@/lib/data-access/articles';
@@ -25,12 +24,11 @@ export function ArticleCard({ article }: ArticleCardProps) {
         className={'w-full aspect-video object-cover'}
       />
       <div className={'flex items-center gap-2 text-sm text-muted-foreground'}>
-        <Link
-          prefetch={false}
+        <HoverPrefetchLink
           href={getSearchLink({ category })}
           className={'uppercase hover:underline'}>
           {humanizeCategory(category!)}
-        </Link>
+        </HoverPrefetchLink>
         <span>&middot;</span>
         <span>{formatDate(publishedAt!)}</span>
       </div>

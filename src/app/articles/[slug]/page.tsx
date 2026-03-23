@@ -1,18 +1,25 @@
 import type { Metadata } from 'next'
-import Link from 'next/link';
 import Image from 'next/image';
 import {notFound} from 'next/navigation';
 import {Separator} from '@/components/ui/separator';
 import {ArticleContent} from '@/components/article/article-content';
 import {TrendingArticles} from '@/components/article/trending-articles';
 import {SubscribeCallToAction} from '@/components/article/call-to-action';
+import {HoverPrefetchLink} from '@/components/shared/hover-prefetch-link';
 import {getArticleMeta, getFeaturedArticles} from '@/lib/data-access/articles';
 import {formatDate, humanizeCategory} from '@/lib/utils';
 import {getSearchLink} from '@/lib/search-params/search';
+import {getPublicationConfig} from '@/lib/data-access/publication-config';
 
 export async function generateMetadata({ params }: PageProps<'/articles/[slug]'>): Promise<Metadata> {
   const { slug } = await params;
-  const article = await getArticleMeta(slug);
+  const [
+    article,
+    publicationConfig
+  ] = await Promise.all([
+    getArticleMeta(slug),
+    getPublicationConfig()
+  ]);
 
   if (!article) {
     return {};
@@ -28,6 +35,7 @@ export async function generateMetadata({ params }: PageProps<'/articles/[slug]'>
       canonical: `/${slug}`,
     },
     openGraph: {
+      url: `/${slug}`,
       title: article.title,
       description: article.excerpt,
       authors: article.author?.name ? [article.author.name] : '',
@@ -40,7 +48,8 @@ export async function generateMetadata({ params }: PageProps<'/articles/[slug]'>
         },
       ],
       type: 'article',
-      publishedTime: article.publishedAt
+      publishedTime: article.publishedAt,
+      siteName: publicationConfig?.publicationName ?? 'Vercel Daily News'
     },
   };
 }
@@ -61,12 +70,11 @@ export default async function ArticlePage({ params }: PageProps<'/articles/[slug
   return (
     <div className={'flex flex-col gap-6 md:gap-8 mt-4 md:mt-8'}>
       <div className={'mx-auto'}>
-        <Link
-          prefetch={false}
+        <HoverPrefetchLink
           href={getSearchLink({ category: article.category })}
           className={'text-sm uppercase hover:underline text-muted-foreground'}>
           {humanizeCategory(article.category!)}
-        </Link>
+        </HoverPrefetchLink>
       </div>
       <div className={'max-w-2xl mx-auto'}>
         <h1 className={'text-3xl md:text-5xl font-medium text-center'}>{article.title}</h1>
