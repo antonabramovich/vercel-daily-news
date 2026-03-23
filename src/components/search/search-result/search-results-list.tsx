@@ -1,5 +1,6 @@
 import {getArticles} from '@/lib/data-access/articles';
 import {ArticleCard} from '@/components/shared/article-card/article-card';
+import {ArticleCardGrid} from '@/components/shared/article-card/article-card-grid';
 import {EmptySearchResults} from '@/components/search/search-result/empty-search-results';
 
 export interface SearchResultsListProps {
@@ -22,10 +23,10 @@ export async function SearchResultsList({ query, category }: SearchResultsListPr
   }
 
   return (
-    <div className={'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6'}>
+    <ArticleCardGrid>
       {articles.map(({ id, ...rest }) => (
         <ArticleCard key={id} article={rest} />
       ))}
-    </div>
+    </ArticleCardGrid>
   )
 }

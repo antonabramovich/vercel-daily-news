@@ -81,8 +81,12 @@ export default async function ArticlePage({ params }: PageProps<'/articles/[slug
           preload
           src={article.image!}
           alt={article.title!}
-          width={500}
-          height={200}
+          width={640}
+          height={372}
+          sizes="(max-width: 48rem) 100vw, 640px"
+          placeholder="blur"
+          blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAABCAQAAABN/Pf1AAAADUlEQVR42mNk4GHAAAABDgAOukGxgAAAAABJRU5ErkJggg=="
+          className="aspect-video object-cover"
         />
       </div>
       <ArticleContent slug={slug} />

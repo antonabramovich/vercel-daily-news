@@ -31,7 +31,7 @@ export default async function Image() {
         }}
       >
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src={vercelSvgBase64} alt="Vercel Daily News logo" style={{ width: 80, height: 69 }} />
+        <img src={vercelSvgBase64} alt="Vercel Daily News logo" width={80} height={69} />
 
         <div
           style={{

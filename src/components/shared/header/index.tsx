@@ -11,10 +11,12 @@ export function Header() {
       <div className={'mx-auto max-w-4xl flex items-center gap-2 xs:gap-8'}>
         <div className={'font-bold flex gap-2 items-center'}>
           <Image
+            unoptimized
             src={'/vercel.svg'}
             alt={'Vercel Daily News logo'}
             width={16}
             height={16}
+            className={'aspect-square'}
           />
           <span className={'hidden xs:inline'}>Vercel Daily</span>
         </div>

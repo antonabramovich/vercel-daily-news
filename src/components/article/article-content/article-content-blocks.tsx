@@ -50,7 +50,16 @@ export async function ArticleContentBlocks({ slug }: ArticleContentBlocksProps) 
           case 'image':
             return block.src ? (
               <figure key={i}>
-                <Image src={block.src} alt={block.alt} />
+                <Image
+                  src={block.src}
+                  alt={block.alt}
+                  width={640}
+                  height={372}
+                  sizes="(max-width: 48rem) 100vw, 640px"
+                  placeholder="blur"
+                  blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAABCAQAAABN/Pf1AAAADUlEQVR42mNk4GHAAAABDgAOukGxgAAAAABJRU5ErkJggg=="
+                  className="aspect-video object-cover"
+                />
                 {block.caption && <figcaption>
                   <Markdown>{block.caption}</Markdown>
                 </figcaption>}
