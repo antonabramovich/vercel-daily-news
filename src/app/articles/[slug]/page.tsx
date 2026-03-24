@@ -1,4 +1,4 @@
-import type { Metadata } from 'next'
+import type {Metadata, ResolvingMetadata} from 'next'
 import Image from 'next/image';
 import {notFound} from 'next/navigation';
 import {Separator} from '@/components/ui/separator';
@@ -9,16 +9,18 @@ import {HoverPrefetchLink} from '@/components/shared/hover-prefetch-link';
 import {getArticleMeta, getFeaturedArticles} from '@/lib/data-access/articles';
 import {formatDate, humanizeCategory} from '@/lib/utils';
 import {getSearchLink} from '@/lib/search-params/search';
-import {getPublicationConfig} from '@/lib/data-access/publication-config';
 
-export async function generateMetadata({ params }: PageProps<'/articles/[slug]'>): Promise<Metadata> {
+export async function generateMetadata(
+  { params }: PageProps<'/articles/[slug]'>,
+  parent: ResolvingMetadata
+): Promise<Metadata> {
   const { slug } = await params;
   const [
     article,
-    publicationConfig
+    parentMetadata,
   ] = await Promise.all([
     getArticleMeta(slug),
-    getPublicationConfig()
+    await parent
   ]);
 
   if (!article) {
@@ -35,6 +37,7 @@ export async function generateMetadata({ params }: PageProps<'/articles/[slug]'>
       canonical: `/${slug}`,
     },
     openGraph: {
+      ...parentMetadata.openGraph,
       url: `/${slug}`,
       title: article.title,
       description: article.excerpt,
@@ -48,8 +51,7 @@ export async function generateMetadata({ params }: PageProps<'/articles/[slug]'>
         },
       ],
       type: 'article',
-      publishedTime: article.publishedAt,
-      siteName: publicationConfig?.publicationName ?? 'Vercel Daily News'
+      publishedTime: article.publishedAt
     },
   };
 }

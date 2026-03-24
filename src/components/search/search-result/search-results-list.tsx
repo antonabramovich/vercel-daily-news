@@ -14,7 +14,8 @@ export async function SearchResultsList({ query, category }: SearchResultsListPr
       search: query || undefined,
       // @ts-expect-error - category can be any string, but OpenAPI spec only allows specific values.
       // We can ignore this error since the UI will handle invalid categories gracefully.
-      category: category || undefined
+      category: category || undefined,
+      limit: query ? 5 : undefined
     }
   });
 
