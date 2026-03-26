@@ -3,7 +3,6 @@ import Link from 'next/link';
 import {Button} from '@/components/ui/button';
 import {FeaturedArticlesList} from '@/components/home/featured-articles/featured-articles-list';
 import {FeaturedArticlesListSkeleton} from '@/components/home/featured-articles/featured-articles-list-skeleton';
-import {ArticleCardGrid} from '@/components/shared/article-card/article-card-grid';
 
 export function FeaturedArticles() {
   return (
@@ -17,11 +16,9 @@ export function FeaturedArticles() {
           </Button>
         </div>
       </div>
-      <ArticleCardGrid>
-        <Suspense fallback={<FeaturedArticlesListSkeleton />}>
-          <FeaturedArticlesList />
-        </Suspense>
-      </ArticleCardGrid>
+      <Suspense fallback={<FeaturedArticlesListSkeleton />}>
+        <FeaturedArticlesList />
+      </Suspense>
     </div>
   );
 }

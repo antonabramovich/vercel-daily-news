@@ -1,4 +1,5 @@
 import {ArticleCard} from '@/components/shared/article-card/article-card';
+import {ArticleCardGrid} from '@/components/shared/article-card/article-card-grid';
 import {getTrendingArticles} from '@/lib/data-access/articles';
 
 export interface TrendingArticlesListProps {
@@ -9,10 +10,10 @@ export async function TrendingArticlesList({ exclude }: TrendingArticlesListProp
   const trendingArticles = await getTrendingArticles(exclude);
 
   return (
-    <>
+    <ArticleCardGrid>
       {trendingArticles.map(({ id, ...rest }) => (
         <ArticleCard key={id} article={rest} />
       ))}
-    </>
+    </ArticleCardGrid>
   )
 }
