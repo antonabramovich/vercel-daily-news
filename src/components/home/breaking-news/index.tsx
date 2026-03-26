@@ -1,7 +1,7 @@
 import {Suspense} from 'react';
 import {BreakingNewsBanner} from '@/components/home/breaking-news/breaking-news-banner';
 
-export async function BreakingNews() {
+export function BreakingNews() {
   return (
     <Suspense>
       <BreakingNewsBanner />

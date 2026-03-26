@@ -5,7 +5,7 @@ import {FeaturedArticlesList} from '@/components/home/featured-articles/featured
 import {FeaturedArticlesListSkeleton} from '@/components/home/featured-articles/featured-articles-list-skeleton';
 import {ArticleCardGrid} from '@/components/shared/article-card/article-card-grid';
 
-export async function FeaturedArticles() {
+export function FeaturedArticles() {
   return (
     <div className={'flex flex-col gap-4'}>
       <div>
