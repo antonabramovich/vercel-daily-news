@@ -5,7 +5,7 @@ import {Button} from '@/components/ui/button';
 import {NotFoundImage} from '@/components/shared/not-found-image';
 
 export const metadata: Metadata = {
-  title: 'Not Found',
+  title: 'Page not found',
   description: 'The page you are looking for does not exist.',
 };
 

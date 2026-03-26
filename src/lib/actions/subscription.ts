@@ -25,7 +25,9 @@ export async function subscribe() {
     name: 'x-subscription-token',
     value: subscriptionToken,
     httpOnly: true,
-    secure: Boolean(process.env.VERCEL_URL)
+    secure: Boolean(process.env.VERCEL_URL),
+    sameSite: 'lax',
+    path: '/'
   });
 }
 

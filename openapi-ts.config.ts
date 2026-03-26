@@ -1,4 +1,4 @@
-import { defineConfig } from '@hey-api/openapi-ts';
+import {defineConfig} from '@hey-api/openapi-ts';
 
 export default defineConfig({
   input: {
@@ -13,7 +13,7 @@ export default defineConfig({
   },
   plugins: [
     {
-      name: '@hey-api/client-fetch',
+      name: '@hey-api/client-next',
       runtimeConfigPath: '@/lib/api/create-client-config',
     }
   ]

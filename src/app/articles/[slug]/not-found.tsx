@@ -1,7 +1,13 @@
 import Link from 'next/link';
+import {Metadata} from 'next';
 import {ArrowRight} from 'lucide-react';
 import {Button} from '@/components/ui/button';
 import {NotFoundImage} from '@/components/shared/not-found-image';
+
+export const metadata: Metadata = {
+  title: 'Article not found',
+  description: 'The article you are looking for does not exist.',
+};
 
 export default function ArticleNotFoundPage() {
   return (

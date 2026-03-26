@@ -3,7 +3,7 @@ import {BreakingNewsBanner} from '@/components/home/breaking-news/breaking-news-
 
 export async function BreakingNews() {
   return (
-    <Suspense fallback={null}>
+    <Suspense>
       <BreakingNewsBanner />
     </Suspense>
   );

@@ -6,7 +6,7 @@ import {ArticleContent} from '@/components/article/article-content';
 import {TrendingArticles} from '@/components/article/trending-articles';
 import {SubscribeCallToAction} from '@/components/article/call-to-action';
 import {HoverPrefetchLink} from '@/components/shared/hover-prefetch-link';
-import {getArticleMeta, getFeaturedArticles} from '@/lib/data-access/articles';
+import {getArticleMeta, getArticles} from '@/lib/data-access/articles';
 import {formatDate, humanizeCategory} from '@/lib/utils';
 import {getSearchLink} from '@/lib/search-params/search';
 
@@ -20,7 +20,7 @@ export async function generateMetadata(
     parentMetadata,
   ] = await Promise.all([
     getArticleMeta(slug),
-    await parent
+    parent
   ]);
 
   if (!article) {
@@ -34,14 +34,14 @@ export async function generateMetadata(
     keywords: article.tags?.join(', '),
     authors: { name: article.author?.name },
     alternates: {
-      canonical: `/${slug}`,
+      canonical: `/articles/${slug}`,
     },
     openGraph: {
       ...parentMetadata.openGraph,
       url: `/${slug}`,
       title: article.title,
       description: article.excerpt,
-      authors: article.author?.name ? [article.author.name] : '',
+      authors: article.author?.name ? [article.author.name] : [],
       images: [
         {
           url: article.image!,
@@ -57,7 +57,7 @@ export async function generateMetadata(
 }
 
 export async function generateStaticParams() {
-  const featuredArticles = await getFeaturedArticles();
+  const featuredArticles = await getArticles();
   return featuredArticles.map(({ slug }) => ({ slug }));
 }
 

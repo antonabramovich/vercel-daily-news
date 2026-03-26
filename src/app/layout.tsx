@@ -1,6 +1,6 @@
 import React from 'react';
 import type {Metadata} from 'next';
-import {Geist, Geist_Mono, Outfit} from 'next/font/google';
+import {Outfit} from 'next/font/google';
 import {Analytics} from '@vercel/analytics/next';
 import {SpeedInsights} from '@vercel/speed-insights/next';
 import {NuqsAdapter} from 'nuqs/adapters/next/app'
@@ -13,16 +13,6 @@ import './globals.css';
 const outfit = Outfit({
   subsets: ['latin'],
   variable: '--font-sans'
-});
-
-const geistSans = Geist({
-  variable: '--font-geist-sans',
-  subsets: ['latin'],
-});
-
-const geistMono = Geist_Mono({
-  variable: '--font-geist-mono',
-  subsets: ['latin'],
 });
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -46,8 +36,8 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default function RootLayout({ children }: LayoutProps<'/'>) {
   return (
-    <html lang="en" className={cn('font-sans', outfit.variable)}>
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased overflow-y-scroll`}>
+    <html lang="en" className={cn('font-sans antialiased', outfit.variable)}>
+      <body className={'overflow-y-scroll'}>
         <Analytics />
         <SpeedInsights />
         <NuqsAdapter>

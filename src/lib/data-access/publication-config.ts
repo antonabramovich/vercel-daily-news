@@ -1,3 +1,4 @@
+import 'server-only';
 import {cacheLife, cacheTag} from 'next/cache';
 import {getPublicationConfig as getPublicationConfigFromApi} from '@/lib/api/client';
 
