@@ -10,7 +10,7 @@ type CategoryDto = Pick<
 
 export async function getCategories(): Promise<CategoryDto[]> {
   'use cache';
-  cacheLife('categories');
+  cacheLife('max');
   cacheTag('categories');
 
   const { data } = await listCategories();

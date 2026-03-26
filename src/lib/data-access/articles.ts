@@ -48,6 +48,10 @@ export async function getFeaturedArticles(): Promise<ArticleMetaDto[]> {
 }
 
 export async function getTrendingArticles(exclude: string[]): Promise<ArticleMetaDto[]> {
+  'use cache';
+  cacheLife('trending-articles');
+  cacheTag('trending-articles');
+
   const { data } = await getTrendingArticlesFromApi({
     query: {
       exclude: exclude.join(',')

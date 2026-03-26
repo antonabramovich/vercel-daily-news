@@ -14,15 +14,15 @@ const nextConfig: NextConfig = {
       revalidate: 60 * 60 * 24 * 2, // 2 days
       expire: 60 * 60 * 24 * 7, // 1 week
     },
+    'trending-articles': {
+      stale: 60 * 60 * 6, // 6 hours
+      revalidate: 60 * 60 * 12, // 12 hours
+      expire: 60 * 60 * 24, // 1 day
+    },
     'article': {
       stale: 60 * 60 * 24, // 1 day
       revalidate: 60 * 60 * 24 * 7, // 1 week
       expire: 60 * 60 * 24 * 30, // 1 month
-    },
-    'categories': {
-      stale: 60 * 60 * 24 * 7, // 1 week
-      revalidate: 60 * 60 * 24 * 30, // 30 days
-      expire: 60 * 60 * 24 * 365, // 365 days
     },
     'search-results': {
       stale: 60 * 15, // 15 minutes
