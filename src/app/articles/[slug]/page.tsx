@@ -57,8 +57,8 @@ export async function generateMetadata(
 }
 
 export async function generateStaticParams() {
-  const featuredArticles = await getArticles();
-  return featuredArticles.map(({ slug }) => ({ slug }));
+  const articles = await getArticles();
+  return articles.map(({ slug }) => ({ slug }));
 }
 
 export default async function ArticlePage({ params }: PageProps<'/articles/[slug]'>) {
