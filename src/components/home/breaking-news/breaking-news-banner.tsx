@@ -4,13 +4,13 @@ import {Badge} from '@/components/ui/badge';
 import Link from 'next/link';
 
 export async function BreakingNewsBanner() {
-  const breakingNewsBanner = await getBreakingNews();
+  const breakingNews = await getBreakingNews();
 
-  if (!breakingNewsBanner) {
+  if (!breakingNews) {
     return null;
   }
 
-  const { headline, slug } = breakingNewsBanner;
+  const { headline, slug } = breakingNews;
 
   return (
     <div className={'absolute top-[65px] left-0 right-0 py-2 px-4 bg-foreground text-background border-b'}>
