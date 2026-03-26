@@ -24,7 +24,7 @@ export function FiltersInputs({ categoriesPromise }: FiltersInputsProps) {
           await setSearchParams({ category: value })
         });
       }}>
-        <SelectTrigger className={'w-full sm:w-1/2 lg:w-1/4 text-sm'}>
+        <SelectTrigger className={'w-full sm:w-1/2 lg:w-1/4 text-sm'} aria-label={'Category selector'}>
           <SelectValue placeholder="All categories" />
         </SelectTrigger>
         <SelectContent position={'popper'}>

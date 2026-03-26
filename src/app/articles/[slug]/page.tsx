@@ -38,10 +38,10 @@ export async function generateMetadata(
     },
     openGraph: {
       ...parentMetadata.openGraph,
-      url: `/${slug}`,
+      url: `/articles/${slug}`,
       title: article.title,
       description: article.excerpt,
-      authors: article.author?.name ? [article.author.name] : [],
+      authors: article.author?.name ? [article?.author?.name] : [],
       images: [
         {
           url: article.image!,
