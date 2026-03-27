@@ -1,8 +1,8 @@
 import {Suspense} from 'react';
 import Link from 'next/link';
 import {Button} from '@/components/ui/button';
-import {FeaturedArticlesList} from '@/components/home/featured-articles/featured-articles-list';
-import {FeaturedArticlesListSkeleton} from '@/components/home/featured-articles/featured-articles-list-skeleton';
+import {FeaturedArticlesList} from './featured-articles-list';
+import {FeaturedArticlesListSkeleton} from './featured-articles-list-skeleton';
 
 export function FeaturedArticles() {
   return (

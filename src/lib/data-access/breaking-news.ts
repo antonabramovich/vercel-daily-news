@@ -11,27 +11,38 @@ type BreakingNewsDto = Pick<
 
 export async function getBreakingNews(): Promise<BreakingNewsDto | null> {
   'use cache';
-  cacheLife('breaking-news');
   cacheTag('breaking-news');
 
-  const { data } = await getBreakingNewsFromApi();
+  const { data, error: breakingNewsError } = await getBreakingNewsFromApi();
 
-  if (!data) {
+  if (breakingNewsError) {
+    cacheLife('seconds');
     return null;
   }
 
-  const { data: article } = await getArticle({
+  if (!data) {
+    cacheLife('breaking-news');
+    return null;
+  }
+
+  const { data: article, error: articleError } = await getArticle({
     path: {
       id: data?.data?.articleId ?? ''
     }
   });
+
+  if (articleError) {
+    cacheLife('seconds');
+  } else {
+    cacheLife('breaking-news');
+  }
 
   if (!article) {
     return null;
   }
 
   return {
-    slug: article?.data?.slug ?? '',
-    headline: data?.data?.headline ?? ''
+    slug: article.data?.slug ?? '',
+    headline: data.data?.headline ?? ''
   };
 }

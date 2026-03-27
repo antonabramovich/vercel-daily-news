@@ -34,15 +34,21 @@ export async function getArticles(options?: Parameters<typeof listArticles>[0]):
 
 export async function getFeaturedArticles(): Promise<ArticleMetaDto[]> {
   'use cache';
-  cacheLife('featured-articles');
   cacheTag('featured-articles');
 
-  const { data } = await listArticles({
+  const { data, error } = await listArticles({
     query: {
       featured: 'true',
       limit: 6
     }
   });
+
+  if (error) {
+    console.error('Error fetching featured articles: ', error);
+    cacheLife('seconds');
+  } else {
+    cacheLife('featured-articles');
+  }
 
   return data?.data?.map(toArticleMetaDto) ?? [];
 }
