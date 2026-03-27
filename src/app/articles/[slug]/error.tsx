@@ -1,10 +1,10 @@
 'use client';
 
 import Link from 'next/link';
-import {ArrowRight, RotateCw, ServerCrash} from 'lucide-react';
+import {RotateCw, Search, ServerCrash} from 'lucide-react';
 import {Button} from '@/components/ui/button';
 
-export default function SearchErrorPage({ error, unstable_retry }: {
+export default function ArticleErrorPage({ error, unstable_retry }: {
   error: Error & { digest?: string }
   unstable_retry: () => void
 }) {
@@ -32,9 +32,9 @@ export default function SearchErrorPage({ error, unstable_retry }: {
           Try again
         </Button>
         <Button variant={'ghost'} asChild>
-          <Link href={'/'}>
-            <ArrowRight />
-            Return Home
+          <Link href={'/search'}>
+            <Search />
+            Browse articles
           </Link>
         </Button>
       </div>

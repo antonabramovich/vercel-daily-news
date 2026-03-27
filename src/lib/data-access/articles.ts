@@ -59,14 +59,20 @@ export async function getFeaturedArticles(): Promise<ArticleMetaDto[]> {
 
 export async function getTrendingArticles(exclude: string[]): Promise<ArticleMetaDto[]> {
   'use cache';
-  cacheLife('trending-articles');
   cacheTag('trending-articles');
 
-  const { data } = await getTrendingArticlesFromApi({
+  const { data, error } = await getTrendingArticlesFromApi({
     query: {
       exclude: exclude.join(',')
     }
   });
+
+  if (error) {
+    cacheLife('seconds');
+    console.error('Error while fetching trending articles: ', error);
+  } else {
+    cacheLife('trending-articles');
+  }
 
   return data?.data?.map(toArticleMetaDto) ?? [];
 }
@@ -103,13 +109,17 @@ async function getArticle(slug: string): Promise<Article | null> {
   cacheLife('article');
   cacheTag(`article-${slug}`);
 
-  const {data} = await getArticleFromApi({
-    path: {
-      id: slug
-    }
-  });
-
-  return data?.data ?? null;
+  try {
+    const {data} = await getArticleFromApi<true>({
+      path: {
+        id: slug
+      }
+    });
+    return data?.data ?? null;
+  } catch (e) {
+    console.error('Error while fetching article: ', e);
+    throw e;
+  }
 }
 
 function toArticleMetaDto(article: Article): ArticleMetaDto {

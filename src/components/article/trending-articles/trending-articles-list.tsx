@@ -9,6 +9,10 @@ export interface TrendingArticlesListProps {
 export async function TrendingArticlesList({ exclude }: TrendingArticlesListProps) {
   const trendingArticles = await getTrendingArticles(exclude);
 
+  if (!trendingArticles.length) {
+    return <div className={'text-muted-foreground'}>No trending articles at the moment. Check back soon!</div>;
+  }
+
   return (
     <ArticleCardGrid>
       {trendingArticles.map(({ id, ...rest }) => (
