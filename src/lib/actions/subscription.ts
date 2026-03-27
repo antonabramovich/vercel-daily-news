@@ -2,6 +2,7 @@
 
 import {cookies} from 'next/headers';
 import {createSubscription, subscribe as subscribeFromApi, unsubscribe as unsubscribeFromApi} from '@/lib/api/client';
+import {env} from '@/lib/env';
 
 export async function toggleSubscription(subscriptionStatus: string) {
   if (subscriptionStatus === 'active') {
@@ -25,7 +26,7 @@ export async function subscribe(): Promise<{ error: true, message: string } | vo
       name: 'x-subscription-token',
       value: subscriptionToken,
       httpOnly: true,
-      secure: Boolean(process.env.VERCEL_URL),
+      secure: Boolean(env.VERCEL_URL),
       sameSite: 'lax',
       path: '/'
     });

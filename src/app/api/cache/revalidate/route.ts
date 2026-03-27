@@ -1,6 +1,7 @@
 import {constants} from 'node:http2';
 import {revalidateTag} from 'next/cache';
 import {NextResponse} from 'next/server';
+import {env} from '@/lib/env';
 
 interface InvalidateCacheRequestBody {
   tag: string;
@@ -8,7 +9,7 @@ interface InvalidateCacheRequestBody {
 }
 
 export async function POST(request: Request) {
-  const isAuthorized = request.headers.get('x-api-key') === process.env.API_KEY;
+  const isAuthorized = request.headers.get('x-api-key') === env.API_KEY;
   if (!isAuthorized) {
     return NextResponse.json({
       error: true,

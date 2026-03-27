@@ -9,6 +9,7 @@ import {Footer} from '@/components/shared/footer';
 import {Toaster} from '@/components/ui/sonner';
 import {getPublicationConfig} from '@/lib/data-access/publication-config';
 import {cn} from '@/lib/utils';
+import {env} from '@/lib/env';
 import './globals.css';
 
 const outfit = Outfit({
@@ -25,7 +26,7 @@ export async function generateMetadata(): Promise<Metadata> {
       template: publicationConfig?.seo?.titleTemplate ?? '%s | Vercel Daily News',
     },
     description: publicationConfig?.seo?.defaultDescription ?? 'News and insights from the world of Vercel and frontend development.',
-    metadataBase: new URL(process.env.VERCEL_PROJECT_PRODUCTION_URL ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}` : 'http://localhost:3000'),
+    metadataBase: new URL(env.VERCEL_PROJECT_PRODUCTION_URL ? `https://${env.VERCEL_PROJECT_PRODUCTION_URL}` : 'http://localhost:3000'),
     openGraph: {
       url: '/',
       siteName: publicationConfig?.publicationName ?? 'Vercel Daily News',
