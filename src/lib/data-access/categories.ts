@@ -10,10 +10,16 @@ type CategoryDto = Pick<
 
 export async function getCategories(): Promise<CategoryDto[]> {
   'use cache';
-  cacheLife('max');
   cacheTag('categories');
 
-  const { data } = await listCategories();
+  const { data, error } = await listCategories();
+
+  if (error) {
+    console.error('Error while listing categories', error);
+    cacheLife('seconds');
+  } else {
+    cacheLife('max');
+  }
 
   return data?.data?.map(({ name, slug }) => ({
     name,

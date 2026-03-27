@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import {RotateCw, Search, ServerCrash} from 'lucide-react';
+import {ArrowRight, RotateCw, ServerCrash} from 'lucide-react';
 import {Button} from '@/components/ui/button';
 
 export default function HomeErrorPage({ error, unstable_retry }: {
@@ -32,9 +32,9 @@ export default function HomeErrorPage({ error, unstable_retry }: {
           Try again
         </Button>
         <Button variant={'ghost'} asChild>
-          <Link href={'/search'}>
-            <Search />
-            Browse articles
+          <Link href={'/'}>
+            <ArrowRight />
+            Return Home
           </Link>
         </Button>
       </div>

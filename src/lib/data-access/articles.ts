@@ -22,14 +22,18 @@ export type ArticleMetaDto = Pick<
   | 'tags'
 >;
 
-export async function getArticles(options?: Parameters<typeof listArticles>[0]): Promise<ArticleMetaDto[]> {
+export async function getArticles(options?: Parameters<typeof listArticles<true>>[0]): Promise<ArticleMetaDto[]> {
   'use cache';
   cacheLife('search-results');
   cacheTag('search-results');
 
-  const { data } = await listArticles(options);
-
-  return data?.data?.map(toArticleMetaDto) ?? [];
+  try {
+    const { data } = await listArticles<true>(options);
+    return data?.data?.map(toArticleMetaDto) ?? [];
+  } catch (e) {
+    console.error('Error while fetching search results', e);
+    throw e;
+  }
 }
 
 export async function getFeaturedArticles(): Promise<ArticleMetaDto[]> {
@@ -44,7 +48,7 @@ export async function getFeaturedArticles(): Promise<ArticleMetaDto[]> {
   });
 
   if (error) {
-    console.error('Error fetching featured articles: ', error);
+    console.error('Error while fetching featured articles: ', error);
     cacheLife('seconds');
   } else {
     cacheLife('featured-articles');
