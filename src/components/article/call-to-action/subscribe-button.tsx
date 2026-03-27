@@ -1,12 +1,21 @@
 'use client';
 
-import {useActionState} from 'react';
+import {toast} from 'sonner';
+import {useActionState, useEffect} from 'react';
 import {subscribe} from '@/lib/actions/subscription';
 import {Button} from '@/components/ui/button';
 import {Spinner} from '@/components/ui/spinner';
 
 export function SubscribeButton() {
-  const [, action, pending] = useActionState(subscribe, null);
+  const [state, action, pending] = useActionState(subscribe, null);
+
+  useEffect(() => {
+    if (state?.error) {
+      toast.error(state.message, {
+        position: 'top-center'
+      });
+    }
+  }, [state]);
 
   return (
     <form action={action}>

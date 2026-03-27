@@ -15,7 +15,7 @@ export async function getCategories(): Promise<CategoryDto[]> {
   const { data, error } = await listCategories();
 
   if (error) {
-    console.error('Error while listing categories', error);
+    console.error('Error while listing categories:', error);
     cacheLife('seconds');
   } else {
     cacheLife('max');

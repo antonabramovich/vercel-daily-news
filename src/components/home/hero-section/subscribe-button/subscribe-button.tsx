@@ -1,6 +1,7 @@
 'use client';
 
-import {use, useActionState} from 'react';
+import {toast} from 'sonner';
+import {use, useActionState, useEffect} from 'react';
 import {Button} from '@/components/ui/button';
 import {Spinner} from '@/components/ui/spinner';
 import {toggleSubscription} from '@/lib/actions/subscription';
@@ -13,7 +14,15 @@ interface SubscribeButtonProps {
 export function SubscribeButton({ subscriptionStatusPromise }: SubscribeButtonProps) {
   const subscriptionStatus = use(subscriptionStatusPromise);
   const toggleSubscriptionAction = toggleSubscription.bind(null, subscriptionStatus);
-  const [, action, pending] = useActionState(toggleSubscriptionAction, null);
+  const [state, action, pending] = useActionState(toggleSubscriptionAction, null);
+
+  useEffect(() => {
+    if (state?.error) {
+      toast.error(state.message, {
+        position: 'top-center'
+      });
+    }
+  }, [state]);
 
   return (
     <form action={action}>

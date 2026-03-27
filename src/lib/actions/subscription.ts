@@ -5,39 +5,52 @@ import {createSubscription, subscribe as subscribeFromApi, unsubscribe as unsubs
 
 export async function toggleSubscription(subscriptionStatus: string) {
   if (subscriptionStatus === 'active') {
-    await unsubscribe();
+    return unsubscribe();
   } else {
-    await subscribe();
+    return subscribe();
   }
 }
 
-export async function subscribe() {
-  const cookieStore = await cookies();
-
-  const { data } = await createSubscription();
-  const subscriptionToken = data?.data?.token || '';
-  await subscribeFromApi({
-    headers: {
-      'x-subscription-token': subscriptionToken,
-    },
-  });
-  cookieStore.set({
-    name: 'x-subscription-token',
-    value: subscriptionToken,
-    httpOnly: true,
-    secure: Boolean(process.env.VERCEL_URL),
-    sameSite: 'lax',
-    path: '/'
-  });
+export async function subscribe(): Promise<{ error: true, message: string } | void> {
+  try {
+    const cookieStore = await cookies();
+    const { data } = await createSubscription();
+    const subscriptionToken = data?.data?.token || '';
+    await subscribeFromApi({
+      headers: {
+        'x-subscription-token': subscriptionToken,
+      },
+    });
+    cookieStore.set({
+      name: 'x-subscription-token',
+      value: subscriptionToken,
+      httpOnly: true,
+      secure: Boolean(process.env.VERCEL_URL),
+      sameSite: 'lax',
+      path: '/'
+    });
+  } catch (e) {
+    console.error('Error while subscribing user to newsletter:', e);
+    return {
+      error: true,
+      message: 'Something went wrong while subscribing. Please try again later.'
+    };
+  }
 }
 
-export async function unsubscribe() {
-  const cookieStore = await cookies();
+export async function unsubscribe(): Promise<void> {
+  let cookieStore;
 
-  await unsubscribeFromApi({
-    headers: {
-      'x-subscription-token': cookieStore.get('x-subscription-token')?.value || '',
-    },
-  });
-  cookieStore.delete('x-subscription-token');
+  try {
+    cookieStore = await cookies();
+    await unsubscribeFromApi({
+      headers: {
+        'x-subscription-token': cookieStore.get('x-subscription-token')?.value || '',
+      },
+    });
+  } catch (e) {
+    console.error('Error while unsubscribing user from newsletter:', e);
+  }
+
+  cookieStore?.delete('x-subscription-token');
 }

@@ -31,7 +31,7 @@ export async function getArticles(options?: Parameters<typeof listArticles<true>
     const { data } = await listArticles<true>(options);
     return data?.data?.map(toArticleMetaDto) ?? [];
   } catch (e) {
-    console.error('Error while fetching search results', e);
+    console.error('Error while fetching search results:', e);
     throw e;
   }
 }
@@ -48,7 +48,7 @@ export async function getFeaturedArticles(): Promise<ArticleMetaDto[]> {
   });
 
   if (error) {
-    console.error('Error while fetching featured articles: ', error);
+    console.error('Error while fetching featured articles:', error);
     cacheLife('seconds');
   } else {
     cacheLife('featured-articles');
@@ -69,7 +69,7 @@ export async function getTrendingArticles(exclude: string[]): Promise<ArticleMet
 
   if (error) {
     cacheLife('seconds');
-    console.error('Error while fetching trending articles: ', error);
+    console.error('Error while fetching trending articles:', error);
   } else {
     cacheLife('trending-articles');
   }
@@ -117,7 +117,7 @@ async function getArticle(slug: string): Promise<Article | null> {
     });
     return data?.data ?? null;
   } catch (e) {
-    console.error('Error while fetching article: ', e);
+    console.error('Error while fetching article:', e);
     throw e;
   }
 }

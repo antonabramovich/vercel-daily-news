@@ -6,6 +6,7 @@ import {SpeedInsights} from '@vercel/speed-insights/next';
 import {NuqsAdapter} from 'nuqs/adapters/next/app'
 import {Header} from '@/components/shared/header';
 import {Footer} from '@/components/shared/footer';
+import {Toaster} from '@/components/ui/sonner';
 import {getPublicationConfig} from '@/lib/data-access/publication-config';
 import {cn} from '@/lib/utils';
 import './globals.css';
@@ -38,8 +39,6 @@ export default function RootLayout({ children }: LayoutProps<'/'>) {
   return (
     <html lang="en" className={cn('font-sans antialiased', outfit.variable)}>
       <body className={'overflow-y-scroll'}>
-        <Analytics />
-        <SpeedInsights />
         <NuqsAdapter>
           <div className={'flex flex-col min-h-screen'}>
             <Header />
@@ -51,6 +50,9 @@ export default function RootLayout({ children }: LayoutProps<'/'>) {
             <Footer />
           </div>
         </NuqsAdapter>
+        <Analytics />
+        <SpeedInsights />
+        <Toaster />
       </body>
     </html>
   );
