@@ -14,7 +14,7 @@ export default function ArticleErrorPage({ error, unstable_retry }: {
         <ServerCrash className={'w-12 h-12 text-red-400'} />
       </div>
 
-      <h1 className={'text-2xl'}>Something went wrong</h1>
+      <h1 className={'text-2xl'}>Error happened while fetching article</h1>
 
       <div>
         {error?.message && (
