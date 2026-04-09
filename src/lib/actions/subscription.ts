@@ -1,10 +1,15 @@
 'use server';
 
 import {cookies} from 'next/headers';
-import {createSubscription, subscribe as subscribeFromApi, unsubscribe as unsubscribeFromApi} from '@/lib/api/client';
+import {
+  Subscription,
+  createSubscription,
+  subscribe as subscribeFromApi,
+  unsubscribe as unsubscribeFromApi
+} from '@/lib/api/client';
 import {env} from '@/lib/env';
 
-export async function toggleSubscription(subscriptionStatus: string) {
+export async function toggleSubscription(subscriptionStatus: Subscription['status']) {
   if (subscriptionStatus === 'active') {
     return unsubscribe();
   } else {
@@ -12,7 +17,7 @@ export async function toggleSubscription(subscriptionStatus: string) {
   }
 }
 
-export async function subscribe(): Promise<{ error: true, message: string } | void> {
+export async function subscribe(): Promise<{ error: boolean, message: string }> {
   try {
     const cookieStore = await cookies();
     const { data } = await createSubscription();
@@ -30,6 +35,10 @@ export async function subscribe(): Promise<{ error: true, message: string } | vo
       sameSite: 'lax',
       path: '/'
     });
+    return {
+      error: false,
+      message: 'Subscribed successfully.'
+    };
   } catch (e) {
     console.error('Error while subscribing user to newsletter:', e);
     return {
