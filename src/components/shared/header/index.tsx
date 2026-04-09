@@ -9,7 +9,7 @@ export function Header() {
   return (
     <header className={'sticky top-0 p-4 bg-background border-b z-1'}>
       <div className={'mx-auto max-w-4xl flex items-center gap-2 xs:gap-8'}>
-        <div className={'font-bold flex gap-2 items-center'}>
+        <div className={'font-bold flex gap-2 items-center shrink-0'}>
           <Image
             unoptimized
             src={'/vercel.svg'}

@@ -13,7 +13,7 @@ export async function SubscriptionBadge() {
   return (
     <Badge className={className} variant="secondary">
       {subscriptionStatus === 'active' ?  <BadgeCheck data-icon="inline-start" /> : <BadgeX data-icon="inline-start" />}
-      {subscriptionStatus === 'active' ? 'Subscribed' : 'Unsubscribed'}
+      <span className={'hidden xs:inline'}>{subscriptionStatus === 'active' ? 'Subscribed' : 'Unsubscribed'}</span>
     </Badge>
   );
 }

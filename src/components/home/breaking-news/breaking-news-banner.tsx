@@ -14,11 +14,11 @@ export async function BreakingNewsBanner() {
 
   return (
     <div className={'absolute top-[65px] left-0 right-0 py-2 px-4 bg-foreground text-background border-b'}>
-      <div className={'mx-auto max-w-4xl flex gap-4 items-center whitespace-nowrap'}>
-        <TriangleAlert />
+      <Link href={`/articles/${slug}`} className={'mx-auto max-w-4xl flex gap-4 items-center whitespace-nowrap hover:underline'}>
+        <TriangleAlert className={'shrink-0 size-4 xs:size-6'} />
         <Badge>Breaking</Badge>
-        <Link href={`/articles/${slug}`} className={'hover:underline overflow-hidden text-ellipsis'}>{headline}</Link>
-      </div>
+        <span className={'overflow-hidden text-ellipsis'}>{headline}</span>
+      </Link>
     </div>
   );
 }

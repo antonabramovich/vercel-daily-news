@@ -15,7 +15,7 @@ export function HeroSection() {
       <p className={'text-lg text-gray-600'}>
         Changelogs, engineering deep dives, customer stories, and community updates - all in one place.
       </p>
-      <div className={'flex gap-4'}>
+      <div className={'flex flex-col xs:flex-row gap-2 xs:gap-4'}>
         <Button size={'lg'} className={'text-sm'} asChild>
           <Link href={'/search'}>
             Browse articles <ArrowRight />
