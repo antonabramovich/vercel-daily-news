@@ -25,8 +25,17 @@ export type ArticleMetaDto = Pick<
 
 export async function getArticles(options?: Parameters<typeof listArticles<true>>[0]): Promise<ArticleMetaDto[]> {
   'use cache';
-  cacheLife('search-results');
   cacheTag('search-results');
+
+  if (options?.query?.category) {
+    cacheTag(`search-results-category-${options.query.category}`);
+  }
+
+  if (options?.query?.search) {
+    cacheLife('seconds');
+  } else {
+    cacheLife('search-results');
+  }
 
   try {
     const { data } = await listArticles<true>(options);
