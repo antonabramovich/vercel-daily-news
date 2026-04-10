@@ -8,6 +8,8 @@ import {InputGroup, InputGroupAddon, InputGroupInput} from '@/components/ui/inpu
 import {useFilters} from '@/lib/search-params/search';
 import type {Category} from '@/lib/api/client';
 
+const SEARCH_DEBOUNCE_MS = 250;
+
 export interface FiltersInputsProps {
   categoriesPromise: Promise<Category[]>;
 }
@@ -44,7 +46,7 @@ export function FiltersInputs({ categoriesPromise }: FiltersInputsProps) {
               await setSearchParams({
                 query: e.target.value || null
               }, {
-                limitUrlUpdates: e.target.value ? debounce(250) : undefined
+                limitUrlUpdates: e.target.value ? debounce(SEARCH_DEBOUNCE_MS) : undefined
               });
             })
           }}

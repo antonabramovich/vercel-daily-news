@@ -8,6 +8,7 @@ import {
   getTrendingArticles as getTrendingArticlesFromApi
 } from '@/lib/api/client';
 import {getSubscriptionStatus} from '@/lib/data-access/subscription';
+import {FEATURED_ARTICLES_COUNT, PROMO_ARTICLE_BLOCKS_COUNT} from '@/lib/constants';
 
 export type ArticleMetaDto = Pick<
   Article,
@@ -43,7 +44,7 @@ export async function getFeaturedArticles(): Promise<ArticleMetaDto[]> {
   const { data, error } = await listArticles({
     query: {
       featured: 'true',
-      limit: 6
+      limit: FEATURED_ARTICLES_COUNT
     }
   });
 
@@ -98,7 +99,7 @@ export async function getArticleContent(slug: string): Promise<ContentBlock[]> {
 
   let content = article?.content ?? [];
   if (subscriptionStatus === 'inactive') {
-    content = content.slice(0, 2);
+    content = content.slice(0, PROMO_ARTICLE_BLOCKS_COUNT);
   }
 
   return content;

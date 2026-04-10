@@ -1,0 +1,5 @@
+export const SUBSCRIPTION_COOKIE_HEADER_NAME = 'x-subscription-token';
+export const BLUR_DATA_URL = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAABCAQAAABN/Pf1AAAADUlEQVR42mNk4GHAAAABDgAOukGxgAAAAABJRU5ErkJggg==";
+export const FEATURED_ARTICLES_COUNT = 6;
+export const PROMO_ARTICLE_BLOCKS_COUNT = 2;
+export const SEARCH_RESULTS_LIMIT = 5;

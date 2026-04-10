@@ -8,6 +8,7 @@ import {
   unsubscribe as unsubscribeFromApi
 } from '@/lib/api/client';
 import {env} from '@/lib/env';
+import {SUBSCRIPTION_COOKIE_HEADER_NAME} from '@/lib/constants';
 
 export async function toggleSubscription(subscriptionStatus: Subscription['status']) {
   if (subscriptionStatus === 'active') {
@@ -24,11 +25,11 @@ export async function subscribe(): Promise<{ error: boolean, message: string }> 
     const subscriptionToken = data?.data?.token || '';
     await subscribeFromApi({
       headers: {
-        'x-subscription-token': subscriptionToken,
+        [SUBSCRIPTION_COOKIE_HEADER_NAME]: subscriptionToken,
       },
     });
     cookieStore.set({
-      name: 'x-subscription-token',
+      name: SUBSCRIPTION_COOKIE_HEADER_NAME,
       value: subscriptionToken,
       httpOnly: true,
       secure: Boolean(env.VERCEL_URL),
@@ -55,12 +56,12 @@ export async function unsubscribe(): Promise<void> {
     cookieStore = await cookies();
     await unsubscribeFromApi({
       headers: {
-        'x-subscription-token': cookieStore.get('x-subscription-token')?.value || '',
+        [SUBSCRIPTION_COOKIE_HEADER_NAME]: cookieStore.get(SUBSCRIPTION_COOKIE_HEADER_NAME)?.value || '',
       },
     });
   } catch (e) {
     console.error('Error while unsubscribing user from newsletter:', e);
   }
 
-  cookieStore?.delete('x-subscription-token');
+  cookieStore?.delete(SUBSCRIPTION_COOKIE_HEADER_NAME);
 }

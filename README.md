@@ -19,7 +19,7 @@ The app reads from an external content API and renders breaking news, featured a
 ## Tech stack
 
 | Area              | Choice                                                               |
-| ----------------- |----------------------------------------------------------------------|
+|-------------------|----------------------------------------------------------------------|
 | Framework         | Next.js 16 (App Router, `cacheComponents`, React Compiler)           |
 | UI                | React 19, Tailwind CSS v4, shadcn/ui, Radix primitives, lucide-react |
 | State / URL       | `nuqs` for typed search params                                       |
@@ -64,14 +64,14 @@ Open [http://localhost:3000](http://localhost:3000).
 
 ## Scripts
 
-| Script              | Description                                                    |
-| ------------------- |----------------------------------------------------------------|
-| `pnpm dev`          | Start the Next.js dev server                                   |
-| `pnpm build`        | Production build                                               |
-| `pnpm start`        | Run the built app                                              |
-| `pnpm lint`         | Lint with ESLint                                               |
-| `pnpm typegen`      | Generate Next.js types without running the build               |
-| `pnpm openapi-ts`   | Regenerate the API client from `src/lib/api/spec/openapi.json` |
+| Script              | Description                                                                             |
+|---------------------|-----------------------------------------------------------------------------------------|
+| `pnpm dev`          | Start the Next.js dev server                                                            |
+| `pnpm build`        | Production build                                                                        |
+| `pnpm start`        | Run the built app                                                                       |
+| `pnpm lint`         | Lint with ESLint                                                                        |
+| `pnpm typegen`      | Generates Next.js types without running the build and runs a full Typescript type-check |
+| `pnpm openapi-ts`   | Regenerate the API client from `src/lib/api/spec/openapi.json`                          |
 
 ## Project structure
 
@@ -125,7 +125,7 @@ The typed client under `src/lib/api/client` is generated from `src/lib/api/spec/
 pnpm openapi-ts
 ```
 
-Generated files are marked with `import 'server-only'` do prevent their import from a client component.
+Generated files are marked with `import 'server-only'` to prevent their import from a client component.
 
 ## Deployment
 

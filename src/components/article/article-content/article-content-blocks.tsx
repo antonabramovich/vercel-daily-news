@@ -1,6 +1,7 @@
 import Image from 'next/image';
 import Markdown from 'react-markdown';
-import {getArticleContent} from "@/lib/data-access/articles";
+import {getArticleContent} from '@/lib/data-access/articles';
+import {BLUR_DATA_URL} from '@/lib/constants';
 
 export interface ArticleContentBlocksProps {
   slug: string;
@@ -57,7 +58,7 @@ export async function ArticleContentBlocks({ slug }: ArticleContentBlocksProps) 
                   height={372}
                   sizes="(max-width: 48rem) 100vw, 640px"
                   placeholder="blur"
-                  blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAABCAQAAABN/Pf1AAAADUlEQVR42mNk4GHAAAABDgAOukGxgAAAAABJRU5ErkJggg=="
+                  blurDataURL={BLUR_DATA_URL}
                   className="aspect-video object-cover"
                 />
                 {block.caption && <figcaption>

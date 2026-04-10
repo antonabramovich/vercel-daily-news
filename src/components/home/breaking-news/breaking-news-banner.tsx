@@ -1,13 +1,14 @@
-import {getBreakingNews} from '@/lib/data-access/breaking-news';
+import Link from 'next/link';
 import {TriangleAlert} from 'lucide-react';
 import {Badge} from '@/components/ui/badge';
-import Link from 'next/link';
+import {getBreakingNews} from '@/lib/data-access/breaking-news';
+import {BreakingNewsBannerSkeleton} from './breaking-news-banner-skeleton';
 
 export async function BreakingNewsBanner() {
   const breakingNews = await getBreakingNews();
 
   if (!breakingNews) {
-    return null;
+    return <BreakingNewsBannerSkeleton />;
   }
 
   const { headline, slug } = breakingNews;

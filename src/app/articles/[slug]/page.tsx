@@ -9,6 +9,7 @@ import {HoverPrefetchLink} from '@/components/shared/hover-prefetch-link';
 import {getArticleMeta, getArticles} from '@/lib/data-access/articles';
 import {formatDate, humanizeCategory} from '@/lib/utils';
 import {getSearchLink} from '@/lib/search-params/search';
+import {BLUR_DATA_URL} from '@/lib/constants';
 
 export async function generateMetadata(
   { params }: PageProps<'/articles/[slug]'>,
@@ -57,6 +58,7 @@ export async function generateMetadata(
 }
 
 export async function generateStaticParams() {
+  // pre-rendering all the articles, since there are only a handful of them returned by the API at the moment
   const articles = await getArticles();
   return articles.map(({ slug }) => ({ slug }));
 }
@@ -95,7 +97,7 @@ export default async function ArticlePage({ params }: PageProps<'/articles/[slug
           height={372}
           sizes="(max-width: 48rem) 100vw, 640px"
           placeholder="blur"
-          blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAABCAQAAABN/Pf1AAAADUlEQVR42mNk4GHAAAABDgAOukGxgAAAAABJRU5ErkJggg=="
+          blurDataURL={BLUR_DATA_URL}
           className="aspect-video object-cover"
         />
       </div>

@@ -3,6 +3,7 @@ import {formatDate, humanizeCategory} from '@/lib/utils';
 import {getSearchLink} from '@/lib/search-params/search';
 import type {ArticleMetaDto} from '@/lib/data-access/articles';
 import {HoverPrefetchLink} from '@/components/shared/hover-prefetch-link';
+import {BLUR_DATA_URL} from '@/lib/constants';
 
 interface ArticleCardProps {
   article: Omit<ArticleMetaDto, 'id'>;
@@ -20,7 +21,7 @@ export function ArticleCard({ article }: ArticleCardProps) {
         height={216}
         sizes="(max-width: 40rem) 100vw, (max-width: 64rem) 50vw, 33vw"
         placeholder="blur"
-        blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAABCAQAAABN/Pf1AAAADUlEQVR42mNk4GHAAAABDgAOukGxgAAAAABJRU5ErkJggg=="
+        blurDataURL={BLUR_DATA_URL}
         className={'w-full aspect-video object-cover'}
       />
       <div className={'flex items-center gap-2 text-sm text-muted-foreground'}>

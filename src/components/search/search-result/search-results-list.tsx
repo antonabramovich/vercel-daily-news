@@ -2,6 +2,7 @@ import {getArticles} from '@/lib/data-access/articles';
 import {ArticleCard} from '@/components/shared/article-card/article-card';
 import {ArticleCardGrid} from '@/components/shared/article-card/article-card-grid';
 import {EmptySearchResults} from '@/components/search/search-result/empty-search-results';
+import {SEARCH_RESULTS_LIMIT} from '@/lib/constants';
 
 export interface SearchResultsListProps {
   query: string;
@@ -15,7 +16,7 @@ export async function SearchResultsList({ query, category }: SearchResultsListPr
       // @ts-expect-error - category can be any string, but OpenAPI spec only allows specific values.
       // We can ignore this error since the UI will handle invalid categories gracefully.
       category: category || undefined,
-      limit: query ? 5 : undefined
+      limit: query ? SEARCH_RESULTS_LIMIT : undefined
     }
   });
 

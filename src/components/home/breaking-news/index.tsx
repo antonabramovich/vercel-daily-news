@@ -1,9 +1,10 @@
 import {Suspense} from 'react';
-import {BreakingNewsBanner} from '@/components/home/breaking-news/breaking-news-banner';
+import {BreakingNewsBanner} from './breaking-news-banner';
+import {BreakingNewsBannerSkeleton} from './breaking-news-banner-skeleton';
 
 export function BreakingNews() {
   return (
-    <Suspense>
+    <Suspense fallback={<BreakingNewsBannerSkeleton />}>
       <BreakingNewsBanner />
     </Suspense>
   );
