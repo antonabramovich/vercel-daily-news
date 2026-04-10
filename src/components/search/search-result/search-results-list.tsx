@@ -3,13 +3,14 @@ import {ArticleCard} from '@/components/shared/article-card/article-card';
 import {ArticleCardGrid} from '@/components/shared/article-card/article-card-grid';
 import {EmptySearchResults} from '@/components/search/search-result/empty-search-results';
 import {SEARCH_RESULTS_LIMIT} from '@/lib/constants';
+import {loadFilters} from '@/lib/search-params/search';
 
 export interface SearchResultsListProps {
-  query: string;
-  category: string | null;
+  searchParams: PageProps<'/search'>['searchParams'];
 }
 
-export async function SearchResultsList({ query, category }: SearchResultsListProps) {
+export async function SearchResultsList({ searchParams }: SearchResultsListProps) {
+  const {query, category} = await loadFilters(searchParams);
   const articles = await getArticles({
     query: {
       search: query || undefined,
