@@ -60,7 +60,7 @@ export async function unsubscribe(): Promise<{ error: boolean, message: string }
     cookieStore.delete(SUBSCRIPTION_COOKIE_HEADER_NAME);
     return {
       error: false,
-      message: 'Subscribed successfully.'
+      message: 'Unsubscribed successfully.'
     };
   } catch (e) {
     console.error('Error while unsubscribing user from newsletter:', e);

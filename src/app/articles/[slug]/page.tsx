@@ -68,7 +68,7 @@ export default async function ArticlePage({ params }: PageProps<'/articles/[slug
   const article = await getArticleMeta(slug);
 
   if (!article) {
-    return notFound();
+    notFound();
   }
 
   return (
