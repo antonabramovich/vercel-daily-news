@@ -1,36 +1,132 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Vercel Daily News
 
-## Getting Started
+A modern news publication built on Next.js 16, demonstrating the new "cacheComponents" caching model, the React Compiler, and a fully type‑safe data layer generated from an OpenAPI spec.
 
-First, run the development server:
+The app reads from an external content API and renders breaking news, featured and trending articles, full article pages, search, and a cookie‑based newsletter subscription.
+
+## Features
+
+- **Breaking news banner** with short‑lived cache and click‑through to the article.
+- **Featured articles** grid on the home page.
+- **Trending articles** sidebar that excludes what the reader is currently viewing.
+- **Article pages** with markdown content blocks and a metered paywall (non‑subscribers see the first two blocks).
+- **Search** with URL‑synchronised filters via `nuqs`.
+- **Newsletter subscription** managed through server actions and an `httpOnly` cookie.
+- **On‑demand revalidation** webhook (`POST /api/cache/revalidate`) protected by an API key.
+- **SEO** with dynamic `generateMetadata`, OpenGraph image, and remote publication config.
+- **Analytics** via `@vercel/analytics` and `@vercel/speed-insights`.
+
+## Tech stack
+
+| Area              | Choice                                                               |
+| ----------------- |----------------------------------------------------------------------|
+| Framework         | Next.js 16 (App Router, `cacheComponents`, React Compiler)           |
+| UI                | React 19, Tailwind CSS v4, shadcn/ui, Radix primitives, lucide-react |
+| State / URL       | `nuqs` for typed search params                                       |
+| Data layer        | `@hey-api/openapi-ts` generated client                               |
+| Validation        | Zod                                                                  |
+| Tooling           | TypeScript 5, ESLint 9, pnpm                                         |
+
+## Getting started
+
+### Prerequisites
+
+- Node.js 22+
+- pnpm
+
+### Install
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+pnpm install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Environment variables
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Create a `.env.local` at the project root:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```dotenv
+# Required — API key for the revalidation webhook
+API_KEY=your-api-key
 
-## Learn More
+# Required — token used to bypass Vercel protection on the upstream API
+VERCEL_PROTECTION_BYPASS_TOKEN=your-bypass-token
+```
 
-To learn more about Next.js, take a look at the following resources:
+`VERCEL_URL` and `VERCEL_PROJECT_PRODUCTION_URL` are injected automatically by Vercel and only need to be set in local environments if you want to mimic production behaviour. The schema is defined in [`src/lib/env.ts`](src/lib/env.ts).
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Run the dev server
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```bash
+pnpm dev
+```
 
-## Deploy on Vercel
+Open [http://localhost:3000](http://localhost:3000).
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Scripts
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+| Script              | Description                                                    |
+| ------------------- |----------------------------------------------------------------|
+| `pnpm dev`          | Start the Next.js dev server                                   |
+| `pnpm build`        | Production build                                               |
+| `pnpm start`        | Run the built app                                              |
+| `pnpm lint`         | Lint with ESLint                                               |
+| `pnpm typegen`      | Generate Next.js types without running the build               |
+| `pnpm openapi-ts`   | Regenerate the API client from `src/lib/api/spec/openapi.json` |
+
+## Project structure
+
+```
+src/
+├── app/                       # App Router routes
+│   ├── api/cache/revalidate/  # POST webhook for tag revalidation
+│   ├── articles/[slug]/       # Article detail page
+│   ├── search/                # Search page
+│   ├── layout.tsx             # Root layout, metadata, providers
+│   ├── opengraph-image.tsx    # Dynamic OG image
+│   └── page.tsx               # Home page
+├── components/
+│   ├── article/               # Article detail UI
+│   ├── home/                  # Breaking news, hero, featured
+│   ├── search/                # Search UI
+│   ├── shared/                # Header, footer, etc.
+│   └── ui/                    # shadcn/ui primitives
+└── lib/
+    ├── actions/               # Server actions (e.g. subscription)
+    ├── api/                   # Generated client + spec + runtime config
+    ├── data-access/           # Cached server-only fetchers
+    ├── search-params/         # nuqs search-param parsers
+    ├── env.ts                 # Zod-validated environment
+    └── utils.ts
+```
+
+## Caching
+
+Cache profiles are declared centrally in [`next.config.ts`](next.config.ts) and applied per fetcher inside `src/lib/data-access/*` via `cacheLife()` and `cacheTag()`.
+When upstream fetches fail, the data layer downgrades to a `seconds` cache life so the next request retries quickly instead of serving a stale error.
+
+### Revalidation webhook
+
+The upstream CMS (or any operator) can purge a tag by calling:
+
+```bash
+curl -X POST https://<website-url>/api/cache/revalidate \
+  -H "x-api-key: $API_KEY" \
+  -H "content-type: application/json" \
+  -d '{ "tag": "featured-articles", "profile": "max" }'
+```
+
+See [`src/app/api/cache/revalidate/route.ts`](src/app/api/cache/revalidate/route.ts).
+
+## API client generation
+
+The typed client under `src/lib/api/client` is generated from `src/lib/api/spec/openapi.json` by [`@hey-api/openapi-ts`](https://heyapi.dev/). After updating the spec, regenerate with:
+
+```bash
+pnpm openapi-ts
+```
+
+Generated files are marked with `import 'server-only'` do prevent their import from a client component.
+
+## Deployment
+
+The project is designed for deployment to Vercel. Push the repository, set `API_KEY` and `VERCEL_PROTECTION_BYPASS_TOKEN` in the project's environment variables, and deploy.
