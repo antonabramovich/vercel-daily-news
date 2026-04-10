@@ -1,24 +1,14 @@
 import {Suspense} from 'react';
-import Link from 'next/link';
-import {Button} from '@/components/ui/button';
 import {FeaturedArticlesList} from './featured-articles-list';
+import {FeaturedArticlesContainer} from './featured-articles-container';
 import {FeaturedArticlesListSkeleton} from './featured-articles-list-skeleton';
 
 export function FeaturedArticles() {
   return (
-    <div className={'flex flex-col gap-4'}>
-      <div>
-        <h2 className={'text-2xl font-bold'}>Featured</h2>
-        <div className={'flex items-center justify-between gap-2'}>
-          <span className={'text-muted-foreground'}>Handpicked articles from the team</span>
-          <Button variant={'link'} className={'text-sm p-0'} asChild>
-            <Link href={'/search'}>View all</Link>
-          </Button>
-        </div>
-      </div>
+    <FeaturedArticlesContainer>
       <Suspense fallback={<FeaturedArticlesListSkeleton />}>
         <FeaturedArticlesList />
       </Suspense>
-    </div>
+    </FeaturedArticlesContainer>
   );
 }

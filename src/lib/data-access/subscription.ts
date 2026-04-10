@@ -17,7 +17,7 @@ export async function getSubscriptionStatus(): Promise<NonNullable<Subscription[
   });
 
   if (error) {
-    console.error('Error while getting subscription status:', error);
+    console.error('Error while getting subscription status:', error?.error?.message ?? 'Unknown error');
   }
 
   return data?.data?.status ?? 'inactive';
