@@ -49,19 +49,24 @@ export async function subscribe(): Promise<{ error: boolean, message: string }> 
   }
 }
 
-export async function unsubscribe(): Promise<void> {
-  let cookieStore;
-
+export async function unsubscribe(): Promise<{ error: boolean, message: string }> {
   try {
-    cookieStore = await cookies();
+    const cookieStore = await cookies();
     await unsubscribeFromApi({
       headers: {
         [SUBSCRIPTION_COOKIE_HEADER_NAME]: cookieStore.get(SUBSCRIPTION_COOKIE_HEADER_NAME)?.value || '',
       },
     });
+    cookieStore.delete(SUBSCRIPTION_COOKIE_HEADER_NAME);
+    return {
+      error: false,
+      message: 'Subscribed successfully.'
+    };
   } catch (e) {
     console.error('Error while unsubscribing user from newsletter:', e);
+    return {
+      error: true,
+      message: 'Something went wrong while unsubscribing. Please try again later.'
+    };
   }
-
-  cookieStore?.delete(SUBSCRIPTION_COOKIE_HEADER_NAME);
 }
